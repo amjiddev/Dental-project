@@ -6,6 +6,70 @@ use App\Http\Controllers\Controller;
 
 class ServiceController extends Controller
 {
+    public function index()
+    {
+        $services = [
+            [
+                'title' => 'Operative (Restorative & Cosmetic)',
+                'description' => 'Comprehensive restorative and cosmetic dental treatments to restore and enhance your smile.',
+                'icon' => 'fas fa-tooth',
+                'route' => 'services.operative',
+                'image' => 'frontend/images/Dental Crowns.webp'
+            ],
+            [
+                'title' => 'Endodontics',
+                'description' => 'Specialized root canal treatments to save infected or damaged teeth and relieve pain.',
+                'icon' => 'fas fa-syringe',
+                'route' => 'services.endodontics',
+                'image' => 'frontend/images/Root Canal Treatment.webp'
+            ],
+            [
+                'title' => 'Oral & Maxillofacial Surgery',
+                'description' => 'Expert surgical procedures for complex dental and facial conditions.',
+                'icon' => 'fas fa-user-md',
+                'route' => 'services.oral-surgery',
+                'image' => 'frontend/images/Dental Implants.jpg'
+            ],
+            [
+                'title' => 'Prosthodontics',
+                'description' => 'Restoration and replacement of missing or damaged teeth with prosthetic devices.',
+                'icon' => 'fas fa-teeth',
+                'route' => 'services.prosthodontics',
+                'image' => 'frontend/images/Dental Crowns.webp'
+            ],
+            [
+                'title' => 'Periodontics & Implantology',
+                'description' => 'Treatment of gum disease and placement of dental implants for permanent tooth replacement.',
+                'icon' => 'fas fa-teeth-open',
+                'route' => 'services.periodontics',
+                'image' => 'frontend/images/Dental Implants.jpg'
+            ],
+            [
+                'title' => 'Orthodontics',
+                'description' => 'Correction of misaligned teeth and jaws using braces and aligners.',
+                'icon' => 'fas fa-smile',
+                'route' => 'services.orthodontics',
+                'image' => 'frontend/images/Orthodontics (Braces).jpg'
+            ],
+            [
+                'title' => 'Pedodontics',
+                'description' => 'Specialized dental care for infants, children, and adolescents.',
+                'icon' => 'fas fa-child',
+                'route' => 'services.pedodontics',
+                'image' => 'frontend/images/teeth whitening.webp'
+            ],
+            [
+                'title' => 'Oral Medicine & Diagnostic Science',
+                'description' => 'Diagnosis and treatment of oral diseases and conditions affecting the mouth.',
+                'icon' => 'fas fa-microscope',
+                'route' => 'services.oral-medicine',
+                'image' => 'frontend/images/teeth-cleaning.jfif'
+            ]
+        ];
+        
+        return view('frontend.services.index', compact('services'));
+    }
+
     public function operative()
     {
         $service = [

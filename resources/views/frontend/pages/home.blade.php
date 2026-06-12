@@ -6,10 +6,10 @@
 @section('frontend-content')
 
 <!-- Hero Section -->
-<section class="hero-section position-relative overflow-hidden">
-    <div class="hero-background" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); min-height: 650px;">
+<section class="hero-section position-relative" style="margin: 0; padding: 0;">
+    <div class="hero-background" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); min-height: 100vh; display: flex; align-items: center;">
         <div class="container">
-            <div class="row align-items-start" style="min-height: 650px; padding-top: 80px;">
+            <div class="row align-items-center" style="min-height: auto; padding: 40px 0;">
                 <div class="col-lg-7 text-white" data-aos="fade-right">
                     <h1 class="display-2 fw-bold mb-4 text-white" style="font-family: var(--font-heading); line-height: 1.2;">
                         We bring together expert dental and aesthetic care
@@ -32,15 +32,9 @@
                     <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=600&h=600&fit=crop" 
                          alt="Dental Care" 
                          class="img-fluid rounded-4 shadow-lg"
-                         style="max-width: 550px; border-radius: 20px !important;">
+                         style="max-width: 100%; border-radius: 20px !important;">
                 </div>
             </div>
-        </div>
-        <!-- Wave SVG -->
-        <div class="position-absolute bottom-0 start-0 w-100" style="z-index: 1;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style="display: block;">
-                <path fill="#ffffff" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-            </svg>
         </div>
     </div>
 </section>
@@ -131,11 +125,41 @@
         </div>
 
         <div class="row g-4 mb-5">
+            @php
+            $serviceImages = [
+                'Teeth Whitening' => 'frontend/images/teeth whitening.webp',
+                'Dental Implants' => 'frontend/images/Dental Implants.jpg',
+                'Root Canal Treatment' => 'frontend/images/Root Canal Treatment.webp',
+                'Root Canal' => 'frontend/images/Root Canal Treatment.webp',
+                'Orthodontics' => 'frontend/images/Orthodontics (Braces).jpg',
+                'Braces' => 'frontend/images/Orthodontics (Braces).jpg',
+                'Dental Crowns' => 'frontend/images/Dental Crowns.webp',
+                'Crowns' => 'frontend/images/Dental Crowns.webp',
+                'Teeth Cleaning' => 'frontend/images/teeth-cleaning.jfif',
+                'Dental Cleaning' => 'frontend/images/teeth-cleaning.jfif',
+                'Cleaning' => 'frontend/images/teeth-cleaning.jfif',
+            ];
+            @endphp
             @forelse($services->take(6) as $service)
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                 <div class="card h-100 border-0 shadow-sm service-card">
-                    @if($service->image)
-                    <img src="{{ asset($service->image) }}" class="card-img-top" alt="{{ $service->name }}" style="height: 280px; object-fit: cover;">
+                    @php
+                    $imageToUse = null;
+                    // Check if service name matches any key in serviceImages
+                    foreach($serviceImages as $key => $imagePath) {
+                        if(stripos($service->name, $key) !== false) {
+                            $imageToUse = $imagePath;
+                            break;
+                        }
+                    }
+                    // If no match found, use service image or show icon
+                    if(!$imageToUse && $service->image) {
+                        $imageToUse = $service->image;
+                    }
+                    @endphp
+                    
+                    @if($imageToUse)
+                    <img src="{{ asset($imageToUse) }}" class="card-img-top" alt="{{ $service->name }}" style="height: 280px; object-fit: cover;">
                     @else
                     <div class="card-img-top bg-gradient-blue d-flex align-items-center justify-content-center" style="height: 280px;">
                         <i class="{{ $service->icon ?? 'fas fa-tooth' }} fa-4x text-white"></i>
@@ -148,31 +172,228 @@
                             @if($service->price)
                             <span class="text-primary fw-bold fs-5">Rs. {{ number_format($service->price, 0) }}</span>
                             @endif
-                            <a href="{{ route('services.operative') }}" class="btn btn-outline-primary rounded-pill px-4">
+                            <button type="button" class="btn btn-outline-primary rounded-pill px-4" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#serviceModal{{ $loop->index }}"
+                                    data-service-name="{{ $service->name }}"
+                                    data-service-description="{{ $service->short_description }}"
+                                    data-service-price="{{ $service->price ?? 0 }}"
+                                    data-service-image="{{ $imageToUse ? asset($imageToUse) : '' }}">
                                 Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Service Modal -->
+            <div class="modal fade" id="serviceModal{{ $loop->index }}" tabindex="-1" aria-labelledby="serviceModalLabel{{ $loop->index }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
+                    <div class="modal-content">
+                        <div class="modal-header border-0 pb-2">
+                            <h5 class="modal-title fw-bold" id="serviceModalLabel{{ $loop->index }}">{{ $service->name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body py-3">
+                            <div class="row g-3">
+                                <div class="col-md-5">
+                                    @if($imageToUse)
+                                    <img src="{{ asset($imageToUse) }}" 
+                                         class="img-fluid rounded-3 zoom-image" 
+                                         alt="{{ $service->name }}" 
+                                         style="width: 100%; height: 220px; object-fit: cover; cursor: zoom-in;"
+                                         data-bs-toggle="modal" 
+                                         data-bs-target="#imageModal{{ $loop->index }}"
+                                         onclick="event.stopPropagation();">
+                                    @else
+                                    <div class="bg-gradient-blue d-flex align-items-center justify-content-center rounded-3" style="height: 220px;">
+                                        <i class="{{ $service->icon ?? 'fas fa-tooth' }} fa-4x text-white"></i>
+                                    </div>
+                                    @endif
+                                </div>
+                                <div class="col-md-7">
+                                    <p class="text-muted mb-3">{{ $service->short_description }}</p>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="fw-bold mb-2">Benefits:</h6>
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Professional treatment</li>
+                                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Modern equipment</li>
+                                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Comfortable environment</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    @if($service->price)
+                                    <div class="alert alert-light border mb-0 py-2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="text-muted">Starting Price:</span>
+                                            <span class="text-primary fw-bold fs-5">Rs. {{ number_format($service->price, 0) }}</span>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 pt-2 pb-3">
+                            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                            <a href="{{ route('appointment.create') }}" class="btn btn-primary rounded-pill px-4">
+                                <i class="fas fa-calendar-check me-2"></i>Book Appointment
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-            @empty
-            <!-- Default Services -->
-            @for($i = 1; $i <= 6; $i++)
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $i * 100 }}">
-                <div class="card h-100 border-0 shadow-sm service-card">
-                    <div class="card-img-top bg-gradient-blue d-flex align-items-center justify-content-center" style="height: 280px;">
-                        <i class="fas fa-tooth fa-4x text-white"></i>
-                    </div>
-                    <div class="card-body p-4">
-                        <h5 class="card-title fw-bold mb-3">Dental Service {{ $i }}</h5>
-                        <p class="card-text text-muted mb-4">Professional dental care service description goes here.</p>
-                        <a href="{{ route('services.operative') }}" class="btn btn-outline-primary rounded-pill px-4">
-                            Learn More
-                        </a>
+            
+            <!-- Image Zoom Modal -->
+            @if($imageToUse)
+            <div class="modal fade" id="imageModal{{ $loop->index }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content bg-transparent border-0">
+                        <div class="modal-body p-0 position-relative">
+                            <button type="button" class="image-modal-close" data-bs-dismiss="modal" aria-label="Close">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                            <img src="{{ asset($imageToUse) }}" class="img-fluid rounded-3" alt="{{ $service->name }}" style="width: 100%; max-height: 80vh; object-fit: contain;" onclick="document.getElementById('imageModal{{ $loop->index }}').querySelector('.image-modal-close').click();">
+                        </div>
                     </div>
                 </div>
             </div>
-            @endfor
+            @endif
+            @empty
+            <!-- Default Services -->
+            @php
+            $defaultServices = [
+                [
+                    'name' => 'Teeth Whitening',
+                    'description' => 'Professional whitening for a brighter smile',
+                    'image' => 'frontend/images/teeth whitening.webp',
+                    'price' => 350
+                ],
+                [
+                    'name' => 'Dental Implants',
+                    'description' => 'Permanent solution for missing teeth',
+                    'image' => 'frontend/images/Dental Implants.jpg',
+                    'price' => 2500
+                ],
+                [
+                    'name' => 'Root Canal Treatment',
+                    'description' => 'Pain-free root canal therapy',
+                    'image' => 'frontend/images/Root Canal Treatment.webp',
+                    'price' => 1200
+                ],
+                [
+                    'name' => 'Orthodontics (Braces)',
+                    'description' => 'Straighten your teeth with modern braces',
+                    'image' => 'frontend/images/Orthodontics (Braces).jpg',
+                    'price' => 3500
+                ],
+                [
+                    'name' => 'Dental Crowns',
+                    'description' => 'Restore damaged teeth with durable crowns',
+                    'image' => 'frontend/images/Dental Crowns.webp',
+                    'price' => 1500
+                ],
+                [
+                    'name' => 'Teeth Cleaning',
+                    'description' => 'Professional dental cleaning',
+                    'image' => 'frontend/images/teeth-cleaning.jfif',
+                    'price' => 80
+                ]
+            ];
+            @endphp
+            @foreach($defaultServices as $index => $service)
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($index + 1) * 100 }}">
+                <div class="card h-100 border-0 shadow-sm service-card">
+                    <img src="{{ asset($service['image']) }}" class="card-img-top" alt="{{ $service['name'] }}" style="height: 280px; object-fit: cover;">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3" style="font-size: 1.3rem;">{{ $service['name'] }}</h5>
+                        <p class="card-text text-muted mb-4">{{ $service['description'] }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-primary fw-bold fs-5">Rs. {{ number_format($service['price'], 0) }}</span>
+                            <button type="button" class="btn btn-outline-primary rounded-pill px-4" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#defaultServiceModal{{ $index }}">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Default Service Modal -->
+            <div class="modal fade" id="defaultServiceModal{{ $index }}" tabindex="-1" aria-labelledby="defaultServiceModalLabel{{ $index }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
+                    <div class="modal-content">
+                        <div class="modal-header border-0 pb-2">
+                            <h5 class="modal-title fw-bold" id="defaultServiceModalLabel{{ $index }}">{{ $service['name'] }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body py-3">
+                            <div class="row g-3">
+                                <div class="col-md-5">
+                                    <img src="{{ asset($service['image']) }}" 
+                                         class="img-fluid rounded-3 zoom-image" 
+                                         alt="{{ $service['name'] }}" 
+                                         style="width: 100%; height: 220px; object-fit: cover; cursor: zoom-in;"
+                                         data-bs-toggle="modal" 
+                                         data-bs-target="#defaultImageModal{{ $index }}"
+                                         onclick="event.stopPropagation();">
+                                </div>
+                                <div class="col-md-7">
+                                    <p class="text-muted mb-3">{{ $service['description'] }}</p>
+                                    
+                                    <p class="text-muted mb-3">
+                                        Professional care using latest technology and techniques for your comfort and satisfaction.
+                                    </p>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="fw-bold mb-2">Benefits:</h6>
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Professional treatment</li>
+                                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Modern equipment</li>
+                                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Affordable pricing</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="alert alert-light border mb-0 py-2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="text-muted">Starting Price:</span>
+                                            <span class="text-primary fw-bold fs-5">Rs. {{ number_format($service['price'], 0) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 pt-2 pb-3">
+                            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                            <a href="{{ route('appointment.create') }}" class="btn btn-primary rounded-pill px-4">
+                                <i class="fas fa-calendar-check me-2"></i>Book Appointment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Default Image Zoom Modal -->
+            <div class="modal fade" id="defaultImageModal{{ $index }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content bg-transparent border-0">
+                        <div class="modal-body p-0 position-relative">
+                            <button type="button" class="image-modal-close" data-bs-dismiss="modal" aria-label="Close">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                            <img src="{{ asset($service['image']) }}" class="img-fluid rounded-3" alt="{{ $service['name'] }}" style="width: 100%; max-height: 80vh; object-fit: contain;" onclick="document.getElementById('defaultImageModal{{ $index }}').querySelector('.image-modal-close').click();">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
             @endforelse
         </div>
     </div>
@@ -497,6 +718,34 @@
 </section>
 
 @endsection
+
+@push('frontend-scripts')
+<script>
+// Fix modal backdrop issue when closing image zoom modal
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all image zoom modals
+    const imageModals = document.querySelectorAll('[id^="imageModal"], [id^="defaultImageModal"]');
+    
+    imageModals.forEach(function(modal) {
+        modal.addEventListener('hidden.bs.modal', function () {
+            // Remove any leftover backdrops
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(function(backdrop) {
+                backdrop.remove();
+            });
+            
+            // Remove modal-open class from body if no modals are open
+            const openModals = document.querySelectorAll('.modal.show');
+            if (openModals.length === 0) {
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            }
+        });
+    });
+});
+</script>
+@endpush
 
 
 

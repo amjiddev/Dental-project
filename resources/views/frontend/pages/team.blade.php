@@ -36,11 +36,11 @@
                         </div>
                         <div class="col-md-7">
                             <div class="card-body p-5">
-                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">Dr. Salima Naveed Manji</h3>
+                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">Dr. Hafsa Qasmi</h3>
                                 <p class="text-primary mb-3 fw-semibold fs-5">Head Of Department & Assistant Professor</p>
                                 <p class="text-muted small mb-3">MHPE (AKU), BDS (FJDC), CHPE(UoL), Citi Certified (USA), C. Implant (PAID) & C. Aesthetics (PARA)</p>
                                 <p class="text-muted mb-4" style="line-height: 1.8;">
-                                    Dr. Salima Naveed Manji brings years of expertise and a compassionate approach to dental and aesthetic care. She is dedicated to creating healthy, confident smiles while ensuring every patient feels comfortable and cared for. Her passion for excellence and attention to detail make her a trusted leader in her field.
+                                    Dr. Hafsa Qasmi brings years of expertise and a compassionate approach to dental and aesthetic care. She is dedicated to creating healthy, confident smiles while ensuring every patient feels comfortable and cared for. Her passion for excellence and attention to detail make her a trusted leader in her field.
                                 </p>
                                 <div class="d-flex gap-3">
                                     <a href="{{ route('appointment.create') }}" class="btn btn-primary px-4 rounded-pill">

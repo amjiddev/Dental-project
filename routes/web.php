@@ -20,6 +20,7 @@ Route::get('/about', [\App\Http\Controllers\Frontend\PageController::class, 'abo
 Route::get('/team', [\App\Http\Controllers\Frontend\PageController::class, 'team'])->name('team');
 
 // Services Routes
+Route::get('/services', [\App\Http\Controllers\Frontend\ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/operative', [\App\Http\Controllers\Frontend\ServiceController::class, 'operative'])->name('services.operative');
 Route::get('/services/endodontics', [\App\Http\Controllers\Frontend\ServiceController::class, 'endodontics'])->name('services.endodontics');
 Route::get('/services/oral-surgery', [\App\Http\Controllers\Frontend\ServiceController::class, 'oralSurgery'])->name('services.oral-surgery');

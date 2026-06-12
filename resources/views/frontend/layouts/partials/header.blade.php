@@ -41,7 +41,7 @@
                 <!-- 3. Services Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('services.*') ? 'active' : '' }}" 
-                       href="#" 
+                       href="{{ route('services.index') }}" 
                        id="servicesDropdown" 
                        role="button" 
                        data-bs-toggle="dropdown" 

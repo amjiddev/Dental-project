@@ -1,1 +1,86 @@
 /* Custom CSS */
+
+/* Prevent horizontal scrollbar */
+body {
+    overflow-x: hidden;
+}
+
+html {
+    overflow-x: hidden;
+}
+
+/* Hero section full screen fix */
+.hero-section {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.hero-background {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Remove any white space after hero */
+.hero-section + section {
+    margin-top: 0 !important;
+    padding-top: 3rem !important;
+}
+
+
+/* Image zoom cursor and hover effect */
+.zoom-image {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.zoom-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Image zoom modal styling */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+}
+
+.modal-content.bg-transparent {
+    background: rgba(0, 0, 0, 0.9) !important;
+}
+
+
+/* Stylish X close button for image modal */
+.image-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.image-modal-close:hover {
+    background: #ffffff;
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.image-modal-close svg {
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.image-modal-close:hover svg {
+    color: #dc3545;
+}
+
+.image-modal-close:active {
+    transform: scale(0.95) rotate(90deg);
+}
