@@ -18,6 +18,7 @@ Route::get('/', [\App\Http\Controllers\Frontend\HomeController::class, 'index'])
 // About Routes
 Route::get('/about', [\App\Http\Controllers\Frontend\PageController::class, 'about'])->name('about');
 Route::get('/team', [\App\Http\Controllers\Frontend\PageController::class, 'team'])->name('team');
+Route::get('/doctor/{doctor}', [\App\Http\Controllers\Frontend\DoctorController::class, 'show'])->name('doctor.show');
 
 // Services Routes
 Route::get('/services', [\App\Http\Controllers\Frontend\ServiceController::class, 'index'])->name('services.index');
@@ -64,7 +65,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('appointments', \App\Http\Controllers\Admin\AppointmentController::class);
         Route::post('appointments/{appointment}/status', [\App\Http\Controllers\Admin\AppointmentController::class, 'updateStatus'])->name('appointments.status');
         Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
+        Route::post('services/{service}/toggle-status', [\App\Http\Controllers\Admin\ServiceController::class, 'toggleStatus'])->name('services.toggle-status');
         Route::resource('doctors', \App\Http\Controllers\Admin\DoctorController::class);
+        Route::post('doctors/{doctor}/toggle-status', [\App\Http\Controllers\Admin\DoctorController::class, 'toggleStatus'])->name('doctors.toggle-status');
+        Route::resource('gallery', \App\Http\Controllers\Admin\GalleryController::class);
+        Route::post('gallery/{gallery}/toggle-status', [\App\Http\Controllers\Admin\GalleryController::class, 'toggleStatus'])->name('gallery.toggle-status');
+        Route::resource('discounts', \App\Http\Controllers\Admin\DiscountController::class);
+        Route::post('discounts/{discount}/toggle-status', [\App\Http\Controllers\Admin\DiscountController::class, 'toggleStatus'])->name('discounts.toggle-status');
+        Route::resource('expert-tips', \App\Http\Controllers\Admin\ExpertTipController::class);
+        Route::post('expert-tips/{expertTip}/toggle-status', [\App\Http\Controllers\Admin\ExpertTipController::class, 'toggleStatus'])->name('expert-tips.toggle-status');
     });
 });
 

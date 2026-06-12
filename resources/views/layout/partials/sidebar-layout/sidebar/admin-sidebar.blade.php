@@ -37,6 +37,33 @@
     </div>
     <!--end:Menu item-->
 
+    <!--begin:Menu item - Gallery-->
+    <div class="menu-item">
+        <a class="menu-link {{ request()->routeIs('admin.gallery.*') ? 'active' : '' }}" href="{{ route('admin.gallery.index') }}">
+            <span class="menu-icon">{!! getIcon('image', 'fs-2') !!}</span>
+            <span class="menu-title">Gallery</span>
+        </a>
+    </div>
+    <!--end:Menu item-->
+
+    <!--begin:Menu item - Discounts-->
+    <div class="menu-item">
+        <a class="menu-link {{ request()->routeIs('admin.discounts.*') ? 'active' : '' }}" href="{{ route('admin.discounts.index') }}">
+            <span class="menu-icon">{!! getIcon('discount', 'fs-2') !!}</span>
+            <span class="menu-title">Discounts</span>
+        </a>
+    </div>
+    <!--end:Menu item-->
+
+    <!--begin:Menu item - Expert Tips-->
+    <div class="menu-item">
+        <a class="menu-link {{ request()->routeIs('admin.expert-tips.*') ? 'active' : '' }}" href="{{ route('admin.expert-tips.index') }}">
+            <span class="menu-icon">{!! getIcon('lightbulb', 'fs-2') !!}</span>
+            <span class="menu-title">Expert Tips</span>
+        </a>
+    </div>
+    <!--end:Menu item-->
+
     <!--begin:Menu item - User Management-->
     <div class="menu-item pt-5">
         <div class="menu-content">

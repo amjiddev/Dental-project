@@ -30,12 +30,11 @@ class ServiceController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'nullable|numeric|min:0',
             'duration_minutes' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
             'order' => 'nullable|integer|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -70,12 +69,11 @@ class ServiceController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'nullable|numeric|min:0',
             'duration_minutes' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
             'order' => 'nullable|integer|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if ($request->hasFile('image')) {
             // Delete old image
@@ -106,5 +104,17 @@ class ServiceController extends Controller
 
         return redirect()->route('admin.services.index')
             ->with('success', 'Service deleted successfully.');
+    }
+
+    public function toggleStatus(Service $service)
+    {
+        $service->update([
+            'is_active' => !$service->is_active
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $service->is_active,
+        ]);
     }
 }

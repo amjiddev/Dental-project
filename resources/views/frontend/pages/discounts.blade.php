@@ -19,155 +19,49 @@
 <section class="py-5 bg-light">
     <div class="container">
         <div class="row g-4">
-            <!-- Discount 1 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            @forelse($discounts as $discount)
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($loop->index * 100) }}">
                 <div class="card h-100 border-0 shadow-lg discount-card">
-                    <div class="card-header bg-primary text-white text-center py-4">
+                    <div class="card-header text-white text-center py-4" style="background-color: {{ $discount->color }};">
                         <div class="discount-badge mb-3">
-                            <span class="display-4 fw-bold">20%</span>
-                            <span class="h5 d-block">OFF</span>
+                            @if($discount->discount_percentage == 100)
+                                <span class="display-4 fw-bold">FREE</span>
+                            @else
+                                <span class="display-4 fw-bold">{{ $discount->discount_percentage }}%</span>
+                                <span class="h5 d-block">OFF</span>
+                            @endif
                         </div>
-                        <h4 class="fw-bold mb-0">New Patient Special</h4>
+                        <h4 class="fw-bold mb-0" style="color: white;">{{ $discount->title }}</h4>
                     </div>
                     <div class="card-body p-4">
+                        @if($discount->benefits && count($discount->benefits) > 0)
                         <ul class="list-unstyled mb-4">
-                            <li class="mb-3"><i class="fas fa-check text-primary me-2"></i>Comprehensive Dental Exam</li>
-                            <li class="mb-3"><i class="fas fa-check text-primary me-2"></i>Full Mouth X-Rays</li>
-                            <li class="mb-3"><i class="fas fa-check text-primary me-2"></i>Teeth Cleaning</li>
-                            <li class="mb-3"><i class="fas fa-check text-primary me-2"></i>Consultation</li>
+                            @foreach($discount->benefits as $benefit)
+                            <li class="mb-3" style="color: {{ $discount->color }};">
+                                <i class="fas fa-check me-2" style="color: {{ $discount->color }};"></i>
+                                {{ $benefit }}
+                            </li>
+                            @endforeach
                         </ul>
-                        <p class="text-muted small mb-4">Valid for first-time patients only. Cannot be combined with other offers.</p>
-                        <a href="{{ route('appointment.create') }}" class="btn btn-primary w-100 rounded-pill">
-                            <i class="fas fa-calendar-check me-2"></i>Book Now
+                        @endif
+                        
+                        @if($discount->description)
+                        <p class="text-muted small mb-4">{{ $discount->description }}</p>
+                        @endif
+                        
+                        <a href="{{ $discount->button_link ?? route('appointment.create') }}" class="w-100 rounded-pill" style="background-color: {{ $discount->color }}; color: white; text-decoration: none; display: inline-block; padding: 10px; text-align: center; border: none; cursor: pointer;">
+                            <i class="fas fa-calendar-check me-2"></i>{{ $discount->button_label }}
                         </a>
                     </div>
                 </div>
             </div>
-
-            <!-- Discount 2 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="card h-100 border-0 shadow-lg discount-card">
-                    <div class="card-header bg-success text-white text-center py-4">
-                        <div class="discount-badge mb-3">
-                            <span class="display-4 fw-bold">15%</span>
-                            <span class="h5 d-block">OFF</span>
-                        </div>
-                        <h4 class="fw-bold mb-0">Teeth Whitening</h4>
-                    </div>
-                    <div class="card-body p-4">
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Professional Whitening</li>
-                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Take-Home Kit Included</li>
-                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Follow-up Consultation</li>
-                            <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Guaranteed Results</li>
-                        </ul>
-                        <p class="text-muted small mb-4">Limited time offer. Book your appointment today!</p>
-                        <a href="{{ route('appointment.create') }}" class="btn btn-success w-100 rounded-pill">
-                            <i class="fas fa-calendar-check me-2"></i>Book Now
-                        </a>
-                    </div>
+            @empty
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <p class="text-muted mb-0">No discounts available at the moment.</p>
                 </div>
             </div>
-
-            <!-- Discount 3 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="card h-100 border-0 shadow-lg discount-card">
-                    <div class="card-header bg-info text-white text-center py-4">
-                        <div class="discount-badge mb-3">
-                            <span class="display-4 fw-bold">10%</span>
-                            <span class="h5 d-block">OFF</span>
-                        </div>
-                        <h4 class="fw-bold mb-0">Family Package</h4>
-                    </div>
-                    <div class="card-body p-4">
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-3"><i class="fas fa-check text-info me-2"></i>For 3+ Family Members</li>
-                            <li class="mb-3"><i class="fas fa-check text-info me-2"></i>All Dental Services</li>
-                            <li class="mb-3"><i class="fas fa-check text-info me-2"></i>Priority Scheduling</li>
-                            <li class="mb-3"><i class="fas fa-check text-info me-2"></i>Free Consultations</li>
-                        </ul>
-                        <p class="text-muted small mb-4">Discount applies to all family members. Valid for 1 year.</p>
-                        <a href="{{ route('appointment.create') }}" class="btn btn-info w-100 rounded-pill text-white">
-                            <i class="fas fa-calendar-check me-2"></i>Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Discount 4 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <div class="card h-100 border-0 shadow-lg discount-card">
-                    <div class="card-header bg-warning text-dark text-center py-4">
-                        <div class="discount-badge mb-3">
-                            <span class="display-4 fw-bold">25%</span>
-                            <span class="h5 d-block">OFF</span>
-                        </div>
-                        <h4 class="fw-bold mb-0">Orthodontic Treatment</h4>
-                    </div>
-                    <div class="card-body p-4">
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-3"><i class="fas fa-check text-warning me-2"></i>Braces or Aligners</li>
-                            <li class="mb-3"><i class="fas fa-check text-warning me-2"></i>Free Initial Consultation</li>
-                            <li class="mb-3"><i class="fas fa-check text-warning me-2"></i>Flexible Payment Plans</li>
-                            <li class="mb-3"><i class="fas fa-check text-warning me-2"></i>Retainers Included</li>
-                        </ul>
-                        <p class="text-muted small mb-4">Special offer on complete orthodontic treatment packages.</p>
-                        <a href="{{ route('appointment.create') }}" class="btn btn-warning w-100 rounded-pill">
-                            <i class="fas fa-calendar-check me-2"></i>Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Discount 5 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="card h-100 border-0 shadow-lg discount-card">
-                    <div class="card-header bg-danger text-white text-center py-4">
-                        <div class="discount-badge mb-3">
-                            <span class="display-4 fw-bold">30%</span>
-                            <span class="h5 d-block">OFF</span>
-                        </div>
-                        <h4 class="fw-bold mb-0">Dental Implants</h4>
-                    </div>
-                    <div class="card-body p-4">
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-3"><i class="fas fa-check text-danger me-2"></i>Single or Multiple Implants</li>
-                            <li class="mb-3"><i class="fas fa-check text-danger me-2"></i>Premium Quality Materials</li>
-                            <li class="mb-3"><i class="fas fa-check text-danger me-2"></i>Lifetime Warranty</li>
-                            <li class="mb-3"><i class="fas fa-check text-danger me-2"></i>Free Follow-ups</li>
-                        </ul>
-                        <p class="text-muted small mb-4">Limited slots available. Book early to secure your discount.</p>
-                        <a href="{{ route('appointment.create') }}" class="btn btn-danger w-100 rounded-pill">
-                            <i class="fas fa-calendar-check me-2"></i>Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Discount 6 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="card h-100 border-0 shadow-lg discount-card">
-                    <div class="card-header bg-dark text-white text-center py-4">
-                        <div class="discount-badge mb-3">
-                            <span class="display-4 fw-bold">FREE</span>
-                            <span class="h5 d-block">Consultation</span>
-                        </div>
-                        <h4 class="fw-bold mb-0">Senior Citizens</h4>
-                    </div>
-                    <div class="card-body p-4">
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-3"><i class="fas fa-check text-dark me-2"></i>Free Dental Checkup</li>
-                            <li class="mb-3"><i class="fas fa-check text-dark me-2"></i>10% Off All Treatments</li>
-                            <li class="mb-3"><i class="fas fa-check text-dark me-2"></i>Priority Appointments</li>
-                            <li class="mb-3"><i class="fas fa-check text-dark me-2"></i>Special Care Plans</li>
-                        </ul>
-                        <p class="text-muted small mb-4">For patients 60 years and above. Valid ID required.</p>
-                        <a href="{{ route('appointment.create') }}" class="btn btn-dark w-100 rounded-pill">
-                            <i class="fas fa-calendar-check me-2"></i>Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
+            @endforelse
         </div>
     </div>
 </section>

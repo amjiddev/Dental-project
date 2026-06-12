@@ -25,7 +25,8 @@ class PageController extends Controller
 
     public function discounts()
     {
-        return view('frontend.pages.discounts');
+        $discounts = \App\Models\Discount::active()->ordered()->get();
+        return view('frontend.pages.discounts', compact('discounts'));
     }
 
     public function gallery()

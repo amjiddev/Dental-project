@@ -505,8 +505,7 @@
         </div>
 
         <div class="row justify-content-center">
-            @if($doctors->isNotEmpty())
-            @php $leadDoctor = $doctors->first(); @endphp
+            @if($leadDoctor)
             <div class="col-lg-10" data-aos="fade-up">
                 <div class="card border-0 shadow-lg doctor-card">
                     <div class="row g-0">
@@ -517,7 +516,7 @@
                                  alt="{{ $leadDoctor->name }}"
                                  style="object-fit: cover; border-radius: 12px 0 0 12px;">
                             @else
-                            <div class="bg-gradient-blue h-100 d-flex align-items-center justify-content-center" style="border-radius: 12px 0 0 12px;">
+                            <div class="bg-gradient-blue h-100 d-flex align-items-center justify-content-center" style="border-radius: 12px 0 0 12px; min-height: 400px;">
                                 <span class="text-white" style="font-size: 10rem; font-weight: 700;">
                                     {{ substr($leadDoctor->name, 0, 1) }}
                                 </span>
@@ -526,13 +525,15 @@
                         </div>
                         <div class="col-md-7">
                             <div class="card-body p-5">
-                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">Dr. Hafsa Qasmi</h3>
-                                <p class="text-primary mb-3 fw-semibold fs-5">Head Of Department & Assistant Professor</p>
-                                <p class="text-muted small mb-3">MHPE (AKU), BDS (FJDC), CHPE(UoL), Citi Certified (USA), C. Implant (PAID) & C. Aesthetics (PARA)</p>
+                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">Dr. {{ $leadDoctor->name }}</h3>
+                                <p class="text-primary mb-3 fw-semibold fs-5">{{ $leadDoctor->specialization }}</p>
+                                @if($leadDoctor->qualification)
+                                <p class="text-muted small mb-3">{{ $leadDoctor->qualification }}</p>
+                                @endif
                                 <p class="text-muted mb-4" style="line-height: 1.8; font-size: 1.05rem;">
-                                    Dr. Hafsa Qasmi brings years of expertise and a compassionate approach to dental and aesthetic care. She is dedicated to creating healthy, confident smiles while ensuring every patient feels comfortable and cared for. Her passion for excellence and attention to detail make her a trusted leader in her field.
+                                    {{ $leadDoctor->bio }}
                                 </p>
-                                <a href="{{ route('team') }}" class="btn btn-primary btn-lg px-5 rounded-pill">
+                                <a href="{{ route('doctor.show', $leadDoctor->id) }}" class="btn btn-primary btn-lg px-5 rounded-pill">
                                     View Full Profile
                                 </a>
                             </div>
@@ -545,20 +546,19 @@
                 <div class="card border-0 shadow-lg doctor-card">
                     <div class="row g-0">
                         <div class="col-md-5">
-                            <div class="bg-gradient-blue h-100 d-flex align-items-center justify-content-center" style="min-height: 400px; border-radius: 12px 0 0 12px;">
+                            <div class="bg-gradient-blue h-100 d-flex align-items-center justify-content-center" style="border-radius: 12px 0 0 12px; min-height: 400px;">
                                 <i class="fas fa-user-md text-white" style="font-size: 8rem;"></i>
                             </div>
                         </div>
                         <div class="col-md-7">
                             <div class="card-body p-5">
-                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">Dr. Salima Naveed Manji</h3>
-                                <p class="text-primary mb-3 fw-semibold fs-5">Head Of Department & Assistant Professor</p>
-                                <p class="text-muted small mb-3">MHPE (AKU), BDS (FJDC), CHPE(UoL), Citi Certified (USA), C. Implant (PAID) & C. Aesthetics (PARA)</p>
+                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">No Lead Doctor Set</h3>
+                                <p class="text-primary mb-3 fw-semibold fs-5">Coming Soon</p>
                                 <p class="text-muted mb-4" style="line-height: 1.8; font-size: 1.05rem;">
-                                    Dr. Salima Naveed Manji brings years of expertise and a compassionate approach to dental and aesthetic care. She is dedicated to creating healthy, confident smiles while ensuring every patient feels comfortable and cared for.
+                                    A lead doctor will be displayed here soon. Please check back later.
                                 </p>
                                 <a href="{{ route('team') }}" class="btn btn-primary btn-lg px-5 rounded-pill">
-                                    View Full Profile
+                                    View Our Team
                                 </a>
                             </div>
                         </div>
@@ -582,119 +582,58 @@
         </div>
 
         <div class="row g-4">
-            <!-- Tip 1 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            @forelse($tips as $tip)
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($loop->index * 100) }}">
                 <div class="tip-card h-100">
                     <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=400&fit=crop" alt="Daily Skincare Routine" class="img-fluid">
+                        @if($tip->image)
+                        <img src="{{ asset($tip->image) }}" alt="{{ $tip->title }}" class="img-fluid" style="object-fit: cover; height: 250px; width: 100%;">
+                        @else
+                        <div style="height: 250px; width: 100%; background: linear-gradient(135deg, #0066FF 0%, #0047BB 100%); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image text-white" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
+                        @endif
                         <div class="tip-overlay">
-                            <span class="tip-category">Skincare</span>
+                            <span class="tip-category">{{ $tip->category }}</span>
                         </div>
                     </div>
                     <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Daily Skincare Routine for Healthy Skin</h5>
-                        <p class="text-muted mb-3">Discover the essential steps for maintaining radiant and healthy skin every day. Learn about cleansing, moisturizing, and sun protection.</p>
-                        <a href="#" class="text-primary fw-semibold">
+                        <h5 class="fw-bold mb-3">{{ $tip->title }}</h5>
+                        <p class="text-muted mb-3">{{ Str::limit($tip->description, 100) }}</p>
+                        <button type="button" class="text-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#tipModal{{ $tip->id }}">
                             Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
+                        </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Tip 2 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=600&h=400&fit=crop" alt="Anti-Aging Tips" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Anti-Aging</span>
+                <!-- Expert Tip Modal -->
+                <div class="modal fade" id="tipModal{{ $tip->id }}" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header border-0">
+                                <h5 class="modal-title fw-bold">{{ $tip->title }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                @if($tip->image)
+                                <img src="{{ asset($tip->image) }}" alt="{{ $tip->title }}" class="img-fluid mb-4" style="max-height: 300px; object-fit: cover; width: 100%; border-radius: 8px;" />
+                                @endif
+                                <div class="mb-3">
+                                    <span class="badge bg-primary mb-3">{{ $tip->category }}</span>
+                                </div>
+                                <p class="text-muted" style="line-height: 1.8;">{{ nl2br(e($tip->description)) }}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Top Anti-Aging Treatments & Tips</h5>
-                        <p class="text-muted mb-3">Explore effective anti-aging treatments and lifestyle tips to maintain youthful, glowing skin at any age.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
                     </div>
                 </div>
             </div>
-
-            <!-- Tip 3 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&h=400&fit=crop" alt="Dental Care" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Dental Care</span>
-                        </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Essential Dental Care Tips for a Bright Smile</h5>
-                        <p class="text-muted mb-3">Learn the best practices for maintaining optimal oral health and achieving a confident, beautiful smile.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+            @empty
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <p class="text-muted mb-0">No expert tips available at the moment.</p>
                 </div>
             </div>
-
-            <!-- Tip 4 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=600&h=400&fit=crop" alt="Facial Treatments" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Aesthetics</span>
-                        </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Benefits of Professional Facial Treatments</h5>
-                        <p class="text-muted mb-3">Understand how professional facial treatments can rejuvenate your skin and address specific concerns effectively.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tip 5 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&h=400&fit=crop" alt="Nutrition for Skin" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Nutrition</span>
-                        </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Nutrition Tips for Glowing Skin</h5>
-                        <p class="text-muted mb-3">Discover which foods and nutrients can help you achieve naturally radiant and healthy skin from within.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tip 6 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&h=400&fit=crop" alt="Teeth Whitening" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Cosmetic</span>
-                        </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Teeth Whitening: What You Need to Know</h5>
-                        <p class="text-muted mb-3">Get insights into professional teeth whitening options and how to maintain your bright smile long-term.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            @endforelse
         </div>
     </div>
 </section>

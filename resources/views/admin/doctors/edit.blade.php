@@ -138,9 +138,22 @@
                     <div class="col-lg-9">
                         <div class="form-check form-switch form-check-custom form-check-solid">
                             <input class="form-check-input" type="checkbox" name="is_active" id="is_active" 
-                                {{ old('is_active', $doctor->is_active) ? 'checked' : '' }} />
+                                {{ (old('is_active') === '1' || old('is_active') === 'on' || (is_null(old('is_active')) && $doctor->is_active)) ? 'checked' : '' }} />
                             <label class="form-check-label" for="is_active">
                                 Active
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-6">
+                    <label class="col-lg-3 col-form-label fw-semibold fs-6">Lead Doctor</label>
+                    <div class="col-lg-9">
+                        <div class="form-check form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" name="is_lead_doctor" id="is_lead_doctor" 
+                                {{ (old('is_lead_doctor') === '1' || old('is_lead_doctor') === 'on' || (is_null(old('is_lead_doctor')) && $doctor->is_lead_doctor)) ? 'checked' : '' }} />
+                            <label class="form-check-label" for="is_lead_doctor">
+                                Make this the lead doctor (only one can be set)
                             </label>
                         </div>
                     </div>

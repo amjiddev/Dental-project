@@ -106,3 +106,57 @@ Breadcrumbs::for('admin.doctors.edit', function (BreadcrumbTrail $trail, $doctor
     $trail->parent('admin.doctors.index');
     $trail->push('Edit Doctor', route('admin.doctors.edit', $doctor));
 });
+
+// Home > Dashboard > Gallery
+Breadcrumbs::for('admin.gallery.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Gallery', route('admin.gallery.index'));
+});
+
+// Home > Dashboard > Gallery > Create
+Breadcrumbs::for('admin.gallery.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.gallery.index');
+    $trail->push('Add Gallery Item', route('admin.gallery.create'));
+});
+
+// Home > Dashboard > Gallery > Edit
+Breadcrumbs::for('admin.gallery.edit', function (BreadcrumbTrail $trail, $gallery) {
+    $trail->parent('admin.gallery.index');
+    $trail->push('Edit Gallery Item', route('admin.gallery.edit', $gallery));
+});
+
+// Home > Dashboard > Discounts
+Breadcrumbs::for('admin.discounts.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Discounts', route('admin.discounts.index'));
+});
+
+// Home > Dashboard > Discounts > Create
+Breadcrumbs::for('admin.discounts.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.discounts.index');
+    $trail->push('Add Discount', route('admin.discounts.create'));
+});
+
+// Home > Dashboard > Discounts > Edit
+Breadcrumbs::for('admin.discounts.edit', function (BreadcrumbTrail $trail, $discount) {
+    $trail->parent('admin.discounts.index');
+    $trail->push('Edit Discount', route('admin.discounts.edit', $discount));
+});
+
+// Home > Dashboard > Expert Tips
+Breadcrumbs::for('admin.expert-tips.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Expert Tips', route('admin.expert-tips.index'));
+});
+
+// Home > Dashboard > Expert Tips > Create
+Breadcrumbs::for('admin.expert-tips.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.expert-tips.index');
+    $trail->push('Add Expert Tip', route('admin.expert-tips.create'));
+});
+
+// Home > Dashboard > Expert Tips > Edit
+Breadcrumbs::for('admin.expert-tips.edit', function (BreadcrumbTrail $trail, $expertTip) {
+    $trail->parent('admin.expert-tips.index');
+    $trail->push('Edit Expert Tip', route('admin.expert-tips.edit', $expertTip));
+});

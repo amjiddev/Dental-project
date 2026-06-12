@@ -33,7 +33,9 @@
                     <div class="mt-2">
                         <h6 class="fw-bold mb-1">{{ $image->title }}</h6>
                         @if($image->description)
-                        <p class="text-muted small mb-0">{{ $image->description }}</p>
+                        <p class="text-muted small mb-0" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;">
+                            {{ \Illuminate\Support\Str::words($image->description, 4, '...') }}
+                        </p>
                         @endif
                     </div>
                     @endif
@@ -47,24 +49,16 @@
             {{ $images->links() }}
         </div>
         @else
-        <!-- Default Gallery Images -->
-        <div class="row g-4">
-            @for($i = 1; $i <= 9; $i++)
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-{{ ['1606811841689-23dfddce3e95', '1629909613654-28e377c37b09', '1588776814546-1ffcf47267a5', '1598256989800-fe5f95da9787', '1609840114035-3c981960afdd', '1606811841689-23dfddce3e95', '1629909613654-28e377c37b09', '1588776814546-1ffcf47267a5', '1598256989800-fe5f95da9787'][$i-1] }}?w=400&h=300&fit=crop" 
-                         alt="Gallery Image {{ $i }}" 
-                         class="img-fluid w-100 rounded-3 shadow-sm"
-                         loading="lazy"
-                         style="height: 300px; object-fit: cover; cursor: pointer;"
-                         onclick="openLightbox({{ $i - 1 }})">
-                    <div class="mt-2">
-                        <h6 class="fw-bold mb-1">Dental Treatment {{ $i }}</h6>
-                        <p class="text-muted small mb-0">Professional dental care services</p>
-                    </div>
-                </div>
-            </div>
-            @endfor
+        <!-- No Gallery Images Message -->
+        <div class="text-center py-5">
+            <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-4" style="opacity: 0.6;">
+                <rect width="120" height="120" rx="12" fill="#E9ECEF"/>
+                <path d="M60 40C50.06 40 42 48.06 42 58V90C42 99.94 50.06 108 60 108C69.94 108 78 99.94 78 90V58C78 48.06 69.94 40 60 40Z" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="60" cy="60" r="4" fill="#6C757D"/>
+                <path d="M48 80L60 68L72 80" stroke="#6C757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h4 class="text-gray-700 fw-bold mb-2">No Images Added Yet</h4>
+            <p class="text-muted mb-0">Gallery items will appear here once they are added and activated in the admin panel.</p>
         </div>
         @endif
     </div>
@@ -72,14 +66,14 @@
 
 <!-- Lightbox Modal -->
 <div class="modal fade" id="lightboxModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content bg-transparent border-0">
-            <div class="modal-body p-0 position-relative">
-                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close" style="z-index: 1050;"></button>
-                <img id="lightboxImage" src="" alt="" class="img-fluid w-100 rounded-3">
-                <div class="position-absolute bottom-0 start-0 end-0 bg-dark bg-opacity-75 text-white p-3 rounded-bottom-3">
-                    <h5 id="lightboxTitle" class="mb-1"></h5>
-                    <p id="lightboxDescription" class="mb-0 small"></p>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: #f5f5f5; border: none;">
+            <div class="modal-body p-4 position-relative">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close" style="z-index: 1050;"></button>
+                <img id="lightboxImage" src="" alt="" class="img-fluid w-100 rounded-3 mb-3" style="max-height: 400px; object-fit: cover;">
+                <div class="text-dark">
+                    <h5 id="lightboxTitle" class="mb-2 fw-bold"></h5>
+                    <p id="lightboxDescription" class="mb-0 small" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; color: #555555; line-height: 1.6;"></p>
                 </div>
             </div>
         </div>
