@@ -22,6 +22,11 @@ class HomeController extends Controller
             ->get();
         $tips = \App\Models\ExpertTip::active()->ordered()->take(6)->get();
 
-        return view('frontend.pages.home', compact('services', 'doctors', 'leadDoctor', 'testimonials', 'latestPosts', 'tips'));
+        $settings = \App\Models\Setting::where('key', 'like', 'home_%')
+            ->orWhere('key', 'like', 'about_image')
+            ->pluck('value', 'key')
+            ->toArray();
+
+        return view('frontend.pages.home', compact('services', 'doctors', 'leadDoctor', 'testimonials', 'latestPosts', 'tips', 'settings'));
     }
 }

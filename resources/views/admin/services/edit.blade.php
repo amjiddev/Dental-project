@@ -53,12 +53,14 @@
                     <label class="col-lg-3 col-form-label fw-semibold fs-6">Full Description</label>
                     <div class="col-lg-9">
                         <textarea name="description" class="form-control form-control-lg @error('description') is-invalid @enderror" 
-                            rows="5" placeholder="Detailed description">{{ old('description', $service->description) }}</textarea>
+                            rows="5" placeholder="Detailed description for the About This Service section">{{ old('description', $service->description) }}</textarea>
                         @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
+
+                @include('admin.services._page-content-fields', ['service' => $service])
 
                 <div class="row mb-6">
                     <label class="col-lg-3 col-form-label fw-semibold fs-6">Icon Class</label>
@@ -86,43 +88,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <div class="form-text">Leave empty to keep current image. Recommended size: 800x600px</div>
-                    </div>
-                </div>
-
-                <div class="row mb-6">
-                    <label class="col-lg-3 col-form-label fw-semibold fs-6">Price</label>
-                    <div class="col-lg-9">
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input type="number" name="price" class="form-control form-control-lg @error('price') is-invalid @enderror" 
-                                placeholder="0.00" step="0.01" min="0" value="{{ old('price', $service->price) }}" />
-                        </div>
-                        @error('price')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row mb-6">
-                    <label class="col-lg-3 col-form-label fw-semibold fs-6">Duration (Minutes)</label>
-                    <div class="col-lg-9">
-                        <input type="number" name="duration_minutes" class="form-control form-control-lg @error('duration_minutes') is-invalid @enderror" 
-                            placeholder="30" min="0" value="{{ old('duration_minutes', $service->duration_minutes) }}" />
-                        @error('duration_minutes')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row mb-6">
-                    <label class="col-lg-3 col-form-label fw-semibold fs-6">Display Order</label>
-                    <div class="col-lg-9">
-                        <input type="number" name="order" class="form-control form-control-lg @error('order') is-invalid @enderror" 
-                            placeholder="0" min="0" value="{{ old('order', $service->order) }}" />
-                        @error('order')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text">Lower numbers appear first</div>
                     </div>
                 </div>
 

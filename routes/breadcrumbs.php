@@ -89,6 +89,24 @@ Breadcrumbs::for('admin.services.edit', function (BreadcrumbTrail $trail, $servi
     $trail->push('Edit Service', route('admin.services.edit', $service));
 });
 
+// Home > Dashboard > Services > {Service} > Treatment Options
+Breadcrumbs::for('admin.services.treatment-options.index', function (BreadcrumbTrail $trail, $service) {
+    $trail->parent('admin.services.index');
+    $trail->push($service->name, route('admin.services.treatment-options.index', $service));
+});
+
+// Home > Dashboard > Services > {Service} > Treatment Options > Create
+Breadcrumbs::for('admin.services.treatment-options.create', function (BreadcrumbTrail $trail, $service) {
+    $trail->parent('admin.services.treatment-options.index', $service);
+    $trail->push('Add Treatment Option', route('admin.services.treatment-options.create', $service));
+});
+
+// Home > Dashboard > Services > {Service} > Treatment Options > Edit
+Breadcrumbs::for('admin.services.treatment-options.edit', function (BreadcrumbTrail $trail, $service, $treatmentOption) {
+    $trail->parent('admin.services.treatment-options.index', $service);
+    $trail->push('Edit Treatment Option', route('admin.services.treatment-options.edit', [$service, $treatmentOption]));
+});
+
 // Home > Dashboard > Doctors
 Breadcrumbs::for('admin.doctors.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
@@ -159,4 +177,22 @@ Breadcrumbs::for('admin.expert-tips.create', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('admin.expert-tips.edit', function (BreadcrumbTrail $trail, $expertTip) {
     $trail->parent('admin.expert-tips.index');
     $trail->push('Edit Expert Tip', route('admin.expert-tips.edit', $expertTip));
+});
+
+// Home > Dashboard > Settings > About Us
+Breadcrumbs::for('admin.settings.about', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('About Us Settings', route('admin.settings.about'));
+});
+
+// Home > Dashboard > Settings > Home Page
+Breadcrumbs::for('admin.settings.home', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Home Page Settings', route('admin.settings.home'));
+});
+
+// Home > Dashboard > Settings > Contact Us
+Breadcrumbs::for('admin.settings.contact', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Contact Us Settings', route('admin.settings.contact'));
 });

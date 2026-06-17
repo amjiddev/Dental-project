@@ -21,7 +21,7 @@
                     {{ $service['title'] }}
                 </h1>
                 <p class="lead text-white mb-5" style="font-size: 1.2rem; line-height: 1.8; max-width: 600px;">
-                    {{ $service['description'] }}
+                    {{ $service['short_description'] }}
                 </p>
                 <div class="d-flex gap-3 flex-wrap">
                     <a href="{{ route('appointment.create') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill">
@@ -57,8 +57,8 @@
                         </div>
                         <div class="col-md-9">
                             <h2 class="h3 fw-bold mb-3" style="color: var(--primary-blue-dark);">About This Service</h2>
-                            <p class="text-muted mb-4" style="font-size: 1.1rem; line-height: 1.8;">
-                                {{ $service['description'] }} Our experienced team uses the latest technology and techniques to ensure the best possible outcomes for our patients. We prioritize your comfort and satisfaction throughout the entire treatment process.
+                            <p class="text-muted mb-4 service-description-3lines" style="font-size: 1.1rem; line-height: 1.8;">
+                                {{ $service['description'] }}
                             </p>
                             <div class="row g-3">
                                 <div class="col-md-4">
@@ -101,25 +101,27 @@
         <div class="row g-4">
             @foreach($service['treatments'] as $index => $treatment)
             <div class="col-lg-6" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
-                <div class="card h-100 border-0 shadow-sm treatment-card" style="border-radius: 15px; overflow: hidden; transition: all 0.3s ease;">
+                <div class="card border-0 shadow-sm treatment-card" style="border-radius: 15px; overflow: hidden; transition: all 0.3s ease;">
                     <div class="row g-0 h-100">
-                        <div class="col-md-5">
-                            <img src="{{ $treatment['image'] }}" 
-                                 class="img-fluid h-100 w-100" 
-                                 alt="{{ $treatment['name'] }}"
-                                 style="object-fit: cover;">
+                        <div class="col-sm-5">
+                            <div style="width: 100%; height: 200px; overflow: hidden;">
+                                <img src="{{ strpos($treatment['image'], 'http') === 0 ? $treatment['image'] : asset($treatment['image']) }}" 
+                                     class="img-fluid w-100 h-100" 
+                                     alt="{{ $treatment['name'] }}"
+                                     style="object-fit: cover; display: block;">
+                            </div>
                         </div>
-                        <div class="col-md-7">
-                            <div class="card-body p-4 d-flex flex-column justify-content-between h-100">
+                        <div class="col-sm-7">
+                            <div class="card-body p-3 d-flex flex-column justify-content-between h-100">
                                 <div>
-                                    <h5 class="card-title fw-bold mb-3" style="color: var(--primary-blue-dark); font-size: 1.2rem;">
+                                    <h5 class="card-title fw-bold mb-2" style="color: var(--primary-blue-dark); font-size: 1.1rem;">
                                         {{ $treatment['name'] }}
                                     </h5>
-                                    <p class="card-text text-muted mb-3" style="font-size: 0.95rem; line-height: 1.6;">
+                                    <p class="card-text text-muted" style="font-size: 0.9rem; line-height: 1.5;">
                                         {{ $treatment['description'] }}
                                     </p>
                                 </div>
-                                <a href="{{ route('appointment.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 align-self-start">
+                                <a href="{{ route('appointment.create', ['service_id' => $service['id'], 'treatment_id' => $treatment['id']]) }}" class="btn btn-primary btn-sm rounded-pill px-4 align-self-start mt-2">
                                     <i class="fas fa-calendar-check me-2"></i>Book Now
                                 </a>
                             </div>
@@ -128,6 +130,7 @@
                 </div>
             </div>
             @endforeach
+        </div>
         </div>
     </div>
 </section>
@@ -143,53 +146,70 @@
         </div>
 
         <div class="row g-4">
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <div class="text-center p-4 feature-box" style="border-radius: 15px; background: #f8f9fa; transition: all 0.3s ease;">
-                    <div class="mb-4">
-                        <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-user-md text-white fa-2x"></i>
+            @if(!empty($service['features']) && is_array($service['features']))
+                @foreach($service['features'] as $index => $feature)
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($index % 4) * 100 }}">
+                    <div class="text-center p-4 feature-box" style="border-radius: 15px; background: #f8f9fa; transition: all 0.3s ease;">
+                        <div class="mb-4">
+                            <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="{{ $feature['icon'] ?? 'fas fa-check-circle' }} text-white fa-2x"></i>
+                            </div>
                         </div>
+                        <h5 class="fw-bold mb-3" style="color: var(--primary-blue-dark);">{{ $feature['title'] ?? $feature['name'] ?? '' }}</h5>
+                        <p class="text-muted mb-0">{{ $feature['description'] ?? '' }}</p>
                     </div>
-                    <h5 class="fw-bold mb-3" style="color: var(--primary-blue-dark);">Expert Specialists</h5>
-                    <p class="text-muted mb-0">Highly qualified professionals with extensive experience</p>
                 </div>
-            </div>
+                @endforeach
+            @else
+                <!-- Fallback to default features if not provided -->
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-center p-4 feature-box" style="border-radius: 15px; background: #f8f9fa; transition: all 0.3s ease;">
+                        <div class="mb-4">
+                            <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-user-md text-white fa-2x"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3" style="color: var(--primary-blue-dark);">Expert Specialists</h5>
+                        <p class="text-muted mb-0">Highly qualified professionals with extensive experience</p>
+                    </div>
+                </div>
 
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="text-center p-4 feature-box" style="border-radius: 15px; background: #f8f9fa; transition: all 0.3s ease;">
-                    <div class="mb-4">
-                        <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-microscope text-white fa-2x"></i>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-center p-4 feature-box" style="border-radius: 15px; background: #f8f9fa; transition: all 0.3s ease;">
+                        <div class="mb-4">
+                            <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-microscope text-white fa-2x"></i>
+                            </div>
                         </div>
+                        <h5 class="fw-bold mb-3" style="color: var(--primary-blue-dark);">Advanced Technology</h5>
+                        <p class="text-muted mb-0">Latest equipment and cutting-edge techniques</p>
                     </div>
-                    <h5 class="fw-bold mb-3" style="color: var(--primary-blue-dark);">Advanced Technology</h5>
-                    <p class="text-muted mb-0">Latest equipment and cutting-edge techniques</p>
                 </div>
-            </div>
 
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="text-center p-4 feature-box" style="border-radius: 15px; background: #f8f9fa; transition: all 0.3s ease;">
-                    <div class="mb-4">
-                        <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-heart text-white fa-2x"></i>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-center p-4 feature-box" style="border-radius: 15px; background: #f8f9fa; transition: all 0.3s ease;">
+                        <div class="mb-4">
+                            <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-heart text-white fa-2x"></i>
+                            </div>
                         </div>
+                        <h5 class="fw-bold mb-3" style="color: var(--primary-blue-dark);">Patient Comfort</h5>
+                        <p class="text-muted mb-0">Your comfort and satisfaction is our priority</p>
                     </div>
-                    <h5 class="fw-bold mb-3" style="color: var(--primary-blue-dark);">Patient Comfort</h5>
-                    <p class="text-muted mb-0">Your comfort and satisfaction is our priority</p>
                 </div>
-            </div>
 
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                <div class="text-center p-4 feature-box" style="border-radius: 15px; background: #f8f9fa; transition: all 0.3s ease;">
-                    <div class="mb-4">
-                        <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-shield-alt text-white fa-2x"></i>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-center p-4 feature-box" style="border-radius: 15px; background: #f8f9fa; transition: all 0.3s ease;">
+                        <div class="mb-4">
+                            <div style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-shield-alt text-white fa-2x"></i>
+                            </div>
                         </div>
+                        <h5 class="fw-bold mb-3" style="color: var(--primary-blue-dark);">Safe & Hygienic</h5>
+                        <p class="text-muted mb-0">Highest safety and hygiene standards maintained</p>
                     </div>
-                    <h5 class="fw-bold mb-3" style="color: var(--primary-blue-dark);">Safe & Hygienic</h5>
-                    <p class="text-muted mb-0">Highest safety and hygiene standards maintained</p>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
 </section>
@@ -286,6 +306,14 @@
 
 @push('frontend-styles')
 <style>
+.service-description-3lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .treatment-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;

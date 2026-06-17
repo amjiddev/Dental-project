@@ -10,8 +10,8 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h1 class="display-4 fw-bold mb-3 text-white">Contact Us</h1>
-                <p class="lead mb-0">We'd love to hear from you. Get in touch with us today!</p>
+                <h1 class="display-4 fw-bold mb-3 text-white">{{ $settings['contact_heading'] ?? 'Contact Us' }}</h1>
+                <p class="lead mb-0">{{ $settings['contact_subtitle'] ?? 'We\'d love to hear from you. Get in touch with us today!' }}</p>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h5 class="h6 mb-1">Address</h5>
-                                <p class="text-muted mb-0">123 Main Street<br>City, State 12345</p>
+                                <p class="text-muted mb-0">{{ nl2br(e($settings['contact_address'] ?? '123 Main Street<br>City, State 12345')) }}</p>
                             </div>
                         </div>
 
@@ -50,7 +50,7 @@
                             <div class="flex-grow-1 ms-3">
                                 <h5 class="h6 mb-1">Phone</h5>
                                 <p class="mb-0">
-                                    <a href="tel:+15551234567" class="text-muted text-decoration-none">+1 (555) 123-4567</a>
+                                    <a href="tel:{{ preg_replace('/[^0-9+]/', '', $settings['contact_phone'] ?? '') }}" class="text-muted text-decoration-none">{{ $settings['contact_phone'] ?? '+1 (555) 123-4567' }}</a>
                                 </p>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                             <div class="flex-grow-1 ms-3">
                                 <h5 class="h6 mb-1">Email</h5>
                                 <p class="mb-0">
-                                    <a href="mailto:info@dentalclinic.com" class="text-muted text-decoration-none">info@dentalclinic.com</a>
+                                    <a href="mailto:{{ $settings['contact_email'] ?? 'info@dentalclinic.com' }}" class="text-muted text-decoration-none">{{ $settings['contact_email'] ?? 'info@dentalclinic.com' }}</a>
                                 </p>
                             </div>
                         </div>
@@ -79,39 +79,54 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h5 class="h6 mb-1">Business Hours</h5>
-                                <p class="text-muted mb-1">Mon - Fri: 9:00 AM - 6:00 PM</p>
-                                <p class="text-muted mb-0">Sat: 9:00 AM - 2:00 PM</p>
+                                <p class="text-muted mb-1">Mon - Fri: {{ $settings['contact_hours_weekday'] ?? '9:00 AM - 6:00 PM' }}</p>
+                                <p class="text-muted mb-1">Sat: {{ $settings['contact_hours_saturday'] ?? '9:00 AM - 2:00 PM' }}</p>
+                                @if(!empty($settings['contact_hours_sunday']) && $settings['contact_hours_sunday'] !== 'Closed')
+                                <p class="text-muted mb-0">Sun: {{ $settings['contact_hours_sunday'] }}</p>
+                                @endif
                             </div>
                         </div>
 
                         <!-- WhatsApp Button -->
+                        @if(!empty($settings['contact_whatsapp']))
                         <div class="mt-4">
-                            <a href="https://wa.me/1234567890?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment" 
+                            <a href="https://wa.me/{{ $settings['contact_whatsapp'] }}?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment" 
                                target="_blank" 
                                class="btn btn-success w-100">
                                 <i class="fab fa-whatsapp me-2"></i>
                                 Chat on WhatsApp
                             </a>
                         </div>
+                        @endif
 
                         <!-- Social Media -->
+                        @if(!empty($settings['contact_facebook']) || !empty($settings['contact_instagram']) || !empty($settings['contact_twitter']) || !empty($settings['contact_linkedin']))
                         <div class="mt-4">
                             <h5 class="h6 mb-3">Follow Us</h5>
                             <div class="d-flex gap-2">
-                                <a href="https://facebook.com" target="_blank" class="btn btn-outline-primary btn-sm">
+                                @if(!empty($settings['contact_facebook']))
+                                <a href="{{ $settings['contact_facebook'] }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                     <i class="fab fa-facebook-f"></i>
                                 </a>
-                                <a href="https://instagram.com" target="_blank" class="btn btn-outline-primary btn-sm">
+                                @endif
+                                @if(!empty($settings['contact_instagram']))
+                                <a href="{{ $settings['contact_instagram'] }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                     <i class="fab fa-instagram"></i>
                                 </a>
-                                <a href="https://twitter.com" target="_blank" class="btn btn-outline-primary btn-sm">
+                                @endif
+                                @if(!empty($settings['contact_twitter']))
+                                <a href="{{ $settings['contact_twitter'] }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                     <i class="fab fa-twitter"></i>
                                 </a>
-                                <a href="https://linkedin.com" target="_blank" class="btn btn-outline-primary btn-sm">
+                                @endif
+                                @if(!empty($settings['contact_linkedin']))
+                                <a href="{{ $settings['contact_linkedin'] }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                     <i class="fab fa-linkedin-in"></i>
                                 </a>
+                                @endif
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -219,6 +234,7 @@
 </section>
 
 <!-- Google Maps Section -->
+@if(!empty($settings['map_embed_url']))
 <section class="py-5 bg-light-blue">
     <div class="container">
         <div class="text-center mb-4">
@@ -231,7 +247,7 @@
                 <!-- Google Maps Embed -->
                 <div class="google-map-container" style="height: 450px; width: 100%;">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1841!2d-73.9875!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1234567890"
+                        src="{{ $settings['map_embed_url'] }}"
                         width="100%" 
                         height="450" 
                         style="border:0;" 
@@ -243,16 +259,19 @@
             </div>
         </div>
 
+        @if(!empty($settings['map_directions_url']))
         <div class="text-center mt-4">
-            <a href="https://www.google.com/maps/dir//123+Main+Street+City+State+12345" 
+            <a href="{{ $settings['map_directions_url'] }}" 
                target="_blank" 
                class="btn btn-outline-primary">
                 <i class="fas fa-directions me-2"></i>
                 Get Directions
             </a>
         </div>
+        @endif
     </div>
 </section>
+@endif
 
 <!-- Quick Contact CTA -->
 <section class="py-5">
@@ -262,10 +281,12 @@
                 <h3 class="h2 mb-3 text-white">Need Immediate Assistance?</h3>
                 <p class="lead mb-4">Call us now or book an appointment online</p>
                 <div class="d-flex flex-wrap justify-content-center gap-3">
-                    <a href="tel:+15551234567" class="btn btn-light btn-lg">
+                    @if(!empty($settings['contact_phone']))
+                    <a href="tel:{{ preg_replace('/[^0-9+]/', '', $settings['contact_phone']) }}" class="btn btn-light btn-lg">
                         <i class="fas fa-phone me-2"></i>
                         Call Now
                     </a>
+                    @endif
                     <a href="{{ route('appointment.create') }}" class="btn btn-outline-light btn-lg">
                         <i class="fas fa-calendar me-2"></i>
                         Book Appointment

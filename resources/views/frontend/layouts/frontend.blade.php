@@ -4,7 +4,7 @@
 
 <head>
     <base href="" />
-    <title>@yield('meta_title', config('app.name'))</title>
+    <title>@yield('meta_title', 'Qasmi Dental')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8" />
     <meta name="description" content="@yield('meta_description', '')" />
@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="@yield('meta_title', config('app.name'))" />
+    <meta property="og:title" content="@yield('meta_title', 'Qasmi Dental')" />
     <meta property="og:description" content="@yield('meta_description', '')" />
     <link rel="canonical" href="{{ url()->current() }}" />
     <meta name="api-base" content="{{ env('STORE_URL') }}">
@@ -20,10 +20,10 @@
     <meta name="author" content="" />
 
     <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="">
-    <link rel="icon" type="image/png" sizes="16x16" href="">
-    <link rel="shortcut icon" href="">
-    <link rel="apple-touch-icon" sizes="180x180" href="">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon.png') }}">
 
     {{-- <link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}"> --}}
 

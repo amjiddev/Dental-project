@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Livewire\Livewire;
 use App\Core\KTBootstrap;
+use App\Models\Service;
 use App\Models\Category;
 use App\Models\ServingCity;
 use App\Models\State;
@@ -41,6 +42,21 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
 
         KTBootstrap::init();
+
+        View::composer('layout.partials.sidebar-layout.sidebar.admin-sidebar', function ($view) {
+            $view->with(
+                'sidebarServices',
+                Service::orderBy('order', 'asc')->get(['id', 'name'])
+            );
+        });
+
+        // Share dynamic services with frontend header
+        View::composer('frontend.layouts.partials.header', function ($view) {
+            $view->with(
+                'frontendServices',
+                Service::active()->ordered()->get(['id', 'name', 'slug'])
+            );
+        });
 
         if (app()->environment('production')) {
             Livewire::setUpdateRoute(function ($handle) {

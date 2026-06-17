@@ -22,6 +22,8 @@ Route::get('/doctor/{doctor}', [\App\Http\Controllers\Frontend\DoctorController:
 
 // Services Routes
 Route::get('/services', [\App\Http\Controllers\Frontend\ServiceController::class, 'index'])->name('services.index');
+Route::get('/services/{slug}', [\App\Http\Controllers\Frontend\ServiceController::class, 'show'])->name('services.show');
+// Legacy routes for backward compatibility
 Route::get('/services/operative', [\App\Http\Controllers\Frontend\ServiceController::class, 'operative'])->name('services.operative');
 Route::get('/services/endodontics', [\App\Http\Controllers\Frontend\ServiceController::class, 'endodontics'])->name('services.endodontics');
 Route::get('/services/oral-surgery', [\App\Http\Controllers\Frontend\ServiceController::class, 'oralSurgery'])->name('services.oral-surgery');
@@ -65,6 +67,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('appointments', \App\Http\Controllers\Admin\AppointmentController::class);
         Route::post('appointments/{appointment}/status', [\App\Http\Controllers\Admin\AppointmentController::class, 'updateStatus'])->name('appointments.status');
         Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
+        Route::resource('services.treatment-options', \App\Http\Controllers\Admin\TreatmentOptionController::class)->scoped();
+        Route::post('services/{service}/treatment-options/{treatmentOption}/toggle-status', [\App\Http\Controllers\Admin\TreatmentOptionController::class, 'toggleStatus'])->name('services.treatment-options.toggle-status');
         Route::post('services/{service}/toggle-status', [\App\Http\Controllers\Admin\ServiceController::class, 'toggleStatus'])->name('services.toggle-status');
         Route::resource('doctors', \App\Http\Controllers\Admin\DoctorController::class);
         Route::post('doctors/{doctor}/toggle-status', [\App\Http\Controllers\Admin\DoctorController::class, 'toggleStatus'])->name('doctors.toggle-status');
@@ -74,6 +78,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('discounts/{discount}/toggle-status', [\App\Http\Controllers\Admin\DiscountController::class, 'toggleStatus'])->name('discounts.toggle-status');
         Route::resource('expert-tips', \App\Http\Controllers\Admin\ExpertTipController::class);
         Route::post('expert-tips/{expertTip}/toggle-status', [\App\Http\Controllers\Admin\ExpertTipController::class, 'toggleStatus'])->name('expert-tips.toggle-status');
+
+        // Settings Routes
+        Route::get('settings/about', [\App\Http\Controllers\Admin\SettingController::class, 'about'])->name('settings.about');
+        Route::put('settings/about', [\App\Http\Controllers\Admin\SettingController::class, 'updateAbout'])->name('settings.about.update');
+        Route::get('settings/home', [\App\Http\Controllers\Admin\SettingController::class, 'home'])->name('settings.home');
+        Route::put('settings/home', [\App\Http\Controllers\Admin\SettingController::class, 'updateHome'])->name('settings.home.update');
+        Route::get('settings/contact', [\App\Http\Controllers\Admin\SettingController::class, 'contact'])->name('settings.contact');
+        Route::put('settings/contact', [\App\Http\Controllers\Admin\SettingController::class, 'updateContact'])->name('settings.contact.update');
+        Route::post('settings/toggle-section', [\App\Http\Controllers\Admin\SettingController::class, 'toggleSection'])->name('settings.toggle-section');
     });
 });
 

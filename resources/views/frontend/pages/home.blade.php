@@ -7,15 +7,19 @@
 
 <!-- Hero Section -->
 <section class="hero-section position-relative" style="margin: 0; padding: 0;">
-    <div class="hero-background" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); min-height: 100vh; display: flex; align-items: center;">
+    @php
+        $heroImg = $settings['home_hero_image'] ?? null;
+        $heroBgStyle = $heroImg ? "background: linear-gradient(135deg, rgba(30, 64, 175, 0.85) 0%, rgba(59, 130, 246, 0.85) 100%), url('" . asset($heroImg) . "'); background-size: cover; background-position: center;" : "background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);";
+    @endphp
+    <div class="hero-background" style="{{ $heroBgStyle }} min-height: 100vh; display: flex; align-items: center;">
         <div class="container">
             <div class="row align-items-center" style="min-height: auto; padding: 40px 0;">
                 <div class="col-lg-7 text-white" data-aos="fade-right">
                     <h1 class="display-2 fw-bold mb-4 text-white" style="font-family: var(--font-heading); line-height: 1.2;">
-                        We bring together expert dental and aesthetic care
+                        {{ $settings['home_hero_title'] ?? 'We bring together expert dental and aesthetic care' }}
                     </h1>
                     <p class="lead mb-5" style="font-size: 1.2rem; line-height: 1.8; max-width: 600px;">
-                        We bring together expert dental and aesthetic care with a passion for creating healthy, beautiful smiles & skins. Every treatment is tailored to your needs, ensuring comfort and results that last.
+                        {{ $settings['home_hero_description'] ?? 'We bring together expert dental and aesthetic care with a passion for creating healthy, beautiful smiles & skins. Every treatment is tailored to your needs, ensuring comfort and results that last.' }}
                     </p>
                     <div class="d-flex gap-3 flex-wrap">
                         <a href="{{ route('appointment.create') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill">
@@ -29,8 +33,12 @@
                     </div>
                 </div>
                 <div class="col-lg-5 d-none d-lg-block" data-aos="fade-left">
-                    <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=600&h=600&fit=crop" 
-                         alt="Dental Care" 
+                    @php
+                        $heroSideImg = $settings['home_hero_image'] ?? 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=600&h=600&fit=crop';
+                        $heroSideImgSrc = str_starts_with($heroSideImg, 'http') ? $heroSideImg : asset($heroSideImg);
+                    @endphp
+                    <img src="{{ $heroSideImgSrc }}"
+                         alt="Dental Care"
                          class="img-fluid rounded-4 shadow-lg"
                          style="max-width: 100%; border-radius: 20px !important;">
                 </div>
@@ -43,45 +51,17 @@
 <section class="py-4 bg-light">
     <div class="container">
         <div class="row g-4 text-center">
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            @for($i = 1; $i <= 4; $i++)
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="{{ $i * 100 }}">
                 <div class="stats-card p-3">
                     <div class="stats-icon mb-2">
-                        <i class="fas fa-tooth text-primary" style="font-size: 2.5rem;"></i>
+                        <i class="{{ $settings['home_stat_' . $i . '_icon'] ?? ($i == 1 ? 'fas fa-tooth' : ($i == 2 ? 'fas fa-user-md' : ($i == 3 ? 'fas fa-smile' : 'fas fa-award'))) }} text-primary" style="font-size: 2.5rem;"></i>
                     </div>
-                    <h2 class="stats-number fw-bold mb-1" data-count="10">0</h2>
-                    <p class="text-muted mb-0 fw-semibold small">Years of Expertise</p>
+                    <h2 class="stats-number fw-bold mb-1" data-count="{{ $settings['home_stat_' . $i . '_number'] ?? ($i == 1 ? '10' : ($i == 2 ? '6' : ($i == 3 ? '2300' : '500'))) }}">0</h2>
+                    <p class="text-muted mb-0 fw-semibold small">{{ $settings['home_stat_' . $i . '_label'] ?? ($i == 1 ? 'Years of Expertise' : ($i == 2 ? 'Expert Doctors' : ($i == 3 ? 'Satisfied Patients' : 'Successful Treatments'))) }}</p>
                 </div>
             </div>
-            
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="stats-card p-3">
-                    <div class="stats-icon mb-2">
-                        <i class="fas fa-user-md text-primary" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h2 class="stats-number fw-bold mb-1" data-count="6">0</h2>
-                    <p class="text-muted mb-0 fw-semibold small">Expert Doctors</p>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="stats-card p-3">
-                    <div class="stats-icon mb-2">
-                        <i class="fas fa-smile text-primary" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h2 class="stats-number fw-bold mb-1" data-count="2300">0</h2>
-                    <p class="text-muted mb-0 fw-semibold small">Satisfied Patients</p>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                <div class="stats-card p-3">
-                    <div class="stats-icon mb-2">
-                        <i class="fas fa-award text-primary" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h2 class="stats-number fw-bold mb-1" data-count="500">0</h2>
-                    <p class="text-muted mb-0 fw-semibold small">Successful Treatments</p>
-                </div>
-            </div>
+            @endfor
         </div>
     </div>
 </section>
@@ -91,20 +71,21 @@
     <div class="container py-5">
         <div class="row align-items-center g-5">
             <div class="col-lg-6" data-aos="fade-right">
-                <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&h=600&fit=crop" 
-                     alt="Dental Clinic" 
+                @php
+                    $aboutImg = $settings['about_image'] ?? 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&h=600&fit=crop';
+                    $aboutImgSrc = str_starts_with($aboutImg, 'http') ? $aboutImg : asset($aboutImg);
+                @endphp
+                <img src="{{ $aboutImgSrc }}"
+                     alt="Dental Clinic"
                      class="img-fluid rounded-4 shadow-lg"
                      style="border-radius: 20px !important;">
             </div>
             <div class="col-lg-6" data-aos="fade-left">
                 <h2 class="display-5 fw-bold mb-4" style="font-family: var(--font-heading); color: var(--primary-blue-dark);">
-                    Creating Beauty Through Healthy Smiles
+                    {{ $settings['home_about_heading'] ?? 'Creating Beauty Through Healthy Smiles' }}
                 </h2>
                 <p class="text-muted mb-4" style="font-size: 1.1rem; line-height: 1.8;">
-                    Welcome to Qasmi Dental & Aesthetic Centre, Lahore's trusted choice for dental and facial aesthetic care. We offer cosmetic and general dentistry, smile makeovers, and advanced facial treatments using modern technology and expert care.
-                </p>
-                <p class="text-muted mb-4" style="font-size: 1.1rem; line-height: 1.8;">
-                    Our skilled team creates personalized plans for your comfort and safety. From routine checkups to whitening, veneers, implants, and facial rejuvenation, we provide lasting results in a modern, welcoming space.
+                    {{ $settings['home_about_description'] ?? "Welcome to Qasmi Dental & Aesthetic Centre, Lahore's trusted choice for dental and facial aesthetic care. We offer cosmetic and general dentistry, smile makeovers, and advanced facial treatments using modern technology and expert care." }}
                 </p>
                 <a href="{{ route('about') }}" class="btn btn-primary btn-lg px-5 rounded-pill">
                     Learn More About Us
@@ -114,6 +95,7 @@
     </div>
 </section>
 
+@if(($settings['home_show_services'] ?? '1') == '1')
 <!-- Services Section -->
 <section class="py-5 bg-light">
     <div class="container py-5">
@@ -427,7 +409,9 @@
         </div>
     </div>
 </section>
+@endif
 
+@if(($settings['home_show_excellence'] ?? '1') == '1')
 <!-- Why Choose Us -->
 <section class="py-5 bg-white">
     <div class="container py-5">
@@ -493,7 +477,9 @@
         </div>
     </div>
 </section>
+@endif
 
+@if(($settings['home_show_lead_surgeon'] ?? '1') == '1')
 <!-- Meet Our Lead Surgeon -->
 <section class="py-5 bg-light">
     <div class="container py-5">
@@ -569,8 +555,9 @@
         </div>
     </div>
 </section>
+@endif
 
-
+@if(($settings['home_show_expert_tips'] ?? '1') == '1')
 <!-- Expert Tips Section -->
 <section class="py-5 bg-white">
     <div class="container py-5">
@@ -605,27 +592,6 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- Expert Tip Modal -->
-                <div class="modal fade" id="tipModal{{ $tip->id }}" tabindex="-1">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header border-0">
-                                <h5 class="modal-title fw-bold">{{ $tip->title }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                @if($tip->image)
-                                <img src="{{ asset($tip->image) }}" alt="{{ $tip->title }}" class="img-fluid mb-4" style="max-height: 300px; object-fit: cover; width: 100%; border-radius: 8px;" />
-                                @endif
-                                <div class="mb-3">
-                                    <span class="badge bg-primary mb-3">{{ $tip->category }}</span>
-                                </div>
-                                <p class="text-muted" style="line-height: 1.8;">{{ nl2br(e($tip->description)) }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             @empty
             <div class="col-12">
@@ -635,8 +601,32 @@
             </div>
             @endforelse
         </div>
+
+        <!-- Expert Tip Modals (placed outside loop for proper Bootstrap behavior) -->
+        @foreach($tips as $tip)
+        <div class="modal fade" id="tipModal{{ $tip->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-bold">{{ $tip->title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if($tip->image)
+                        <img src="{{ asset($tip->image) }}" alt="{{ $tip->title }}" class="img-fluid mb-4" style="max-height: 300px; object-fit: cover; width: 100%; border-radius: 8px;" />
+                        @endif
+                        <div class="mb-3">
+                            <span class="badge bg-primary mb-3">{{ $tip->category }}</span>
+                        </div>
+                        <p class="text-muted" style="line-height: 1.8;">{{ nl2br(e($tip->description)) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endforeach
     </div>
 </section>
+@endif
 
 <!-- CTA Section -->
 <section class="py-5 bg-gradient-blue text-white">

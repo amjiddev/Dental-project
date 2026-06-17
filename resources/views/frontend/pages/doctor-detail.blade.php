@@ -21,12 +21,17 @@
         <div class="row g-5">
             <!-- Doctor Image and Info -->
             <div class="col-lg-4" data-aos="fade-right">
-                <div class="card border-0 shadow-lg">
+                <div class="card border-0 shadow-lg position-relative">
                     @if($doctor->image)
                     <img src="{{ asset($doctor->image) }}" alt="Dr. {{ $doctor->name }}" class="card-img-top" style="height: 400px; object-fit: cover;">
                     @else
                     <div class="bg-gradient-blue d-flex align-items-center justify-content-center" style="height: 400px;">
                         <span class="text-white" style="font-size: 8rem;">{{ substr($doctor->name, 0, 1) }}</span>
+                    </div>
+                    @endif
+                    @if($doctor->is_lead_doctor)
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-warning">Lead Doctor</span>
                     </div>
                     @endif
                     <div class="card-body p-4">
@@ -66,13 +71,6 @@
                     <a href="{{ route('appointment.create') }}" class="btn btn-primary btn-lg px-5 rounded-pill mt-4">
                         <i class="fas fa-calendar-check me-2"></i>Book Appointment
                     </a>
-
-                    @if($doctor->is_lead_doctor)
-                    <div class="alert alert-info border-0" role="alert">
-                        <i class="fas fa-star me-2"></i>
-                        <strong>Lead Dental Surgeon</strong>
-                    </div>
-                    @endif
                 </div>
             </div>
         </div>

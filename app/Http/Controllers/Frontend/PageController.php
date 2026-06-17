@@ -14,13 +14,20 @@ class PageController extends Controller
     public function about()
     {
         $doctors = Doctor::active()->ordered()->get();
-        return view('frontend.pages.about', compact('doctors'));
+        $settings = Setting::where('key', 'like', 'about_%')
+            ->orWhere('key', 'like', 'mission_%')
+            ->orWhere('key', 'like', 'vision_%')
+            ->orWhere('key', 'like', 'about_image')
+            ->pluck('value', 'key')
+            ->toArray();
+        return view('frontend.pages.about', compact('doctors', 'settings'));
     }
 
     public function team()
     {
         $doctors = Doctor::active()->ordered()->get();
-        return view('frontend.pages.team', compact('doctors'));
+        $leadDoctor = Doctor::where('is_lead_doctor', true)->where('is_active', true)->first();
+        return view('frontend.pages.team', compact('doctors', 'leadDoctor'));
     }
 
     public function discounts()
@@ -42,7 +49,11 @@ class PageController extends Controller
 
     public function contact()
     {
-        return view('frontend.pages.contact');
+        $settings = Setting::where('key', 'like', 'contact_%')
+            ->orWhere('key', 'like', 'map_%')
+            ->pluck('value', 'key')
+            ->toArray();
+        return view('frontend.pages.contact', compact('settings'));
     }
 
     public function contactSubmit(Request $request)

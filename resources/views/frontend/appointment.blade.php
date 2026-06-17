@@ -52,34 +52,50 @@
                                 <!-- Name -->
                                 <div class="col-md-6">
                                     <label for="name" class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
-                                    @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Enter your full name" pattern="[a-zA-Z\s]+" title="Name can only contain letters and spaces" required>
+                                    @error('name')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                 </div>
 
                                 <!-- Email -->
                                 <div class="col-md-6">
                                     <label for="email" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
-                                    @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="your@email.com" required>
+                                    @error('email')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                 </div>
 
                                 <!-- Phone -->
                                 <div class="col-md-6">
                                     <label for="phone" class="form-label fw-semibold">Phone <span class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone') }}" required>
-                                    @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    <input type="tel" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone') }}" placeholder="+1 (622) 936-6659" pattern="[\+]?[0-9\s\(\)\-]{10,20}" title="Phone format examples: +1 (622) 936-6659, +92-300-1234567, 300-123-4567" required>
+                                    @error('phone')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                 </div>
 
                                 <!-- Service -->
                                 <div class="col-md-6">
-                                    <label for="service_id" class="form-label fw-semibold">Select Service</label>
-                                    <select class="form-select @error('service_id') is-invalid @enderror" id="service_id" name="service_id">
+                                    <label for="service_id" class="form-label fw-semibold">Select Service <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('service_id') is-invalid @enderror" id="service_id" name="service_id" required>
                                         <option value="">Choose a service...</option>
                                         @foreach($services as $service)
-                                        <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>{{ $service->name }}</option>
+                                        <option value="{{ $service->id }}" {{ (old('service_id') ?? $selectedServiceId) == $service->id ? 'selected' : '' }}>{{ $service->name }}</option>
                                         @endforeach
                                     </select>
-                                    @error('service_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    @error('service_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                </div>
+
+                                <!-- Treatment Option -->
+                                <div class="col-md-6">
+                                    <label for="treatment_option_id" class="form-label fw-semibold">Treatment Option</label>
+                                    <select class="form-select @error('treatment_option_id') is-invalid @enderror" id="treatment_option_id" name="treatment_option_id">
+                                        <option value="">Choose a treatment...</option>
+                                        @if(!empty($treatments) && count($treatments) > 0)
+                                            @foreach($treatments as $treatment)
+                                            <option value="{{ $treatment['id'] ?? $treatment->id ?? '' }}" {{ (old('treatment_option_id') ?? $selectedTreatmentId) == ($treatment['id'] ?? $treatment->id ?? '') ? 'selected' : '' }}>
+                                                {{ $treatment['name'] ?? $treatment->name ?? '' }}
+                                            </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    @error('treatment_option_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                 </div>
 
                                 <!-- Doctor -->
@@ -91,14 +107,14 @@
                                         <option value="{{ $doctor->id }}" {{ old('doctor_id') == $doctor->id ? 'selected' : '' }}>{{ $doctor->name }} - {{ $doctor->specialization }}</option>
                                         @endforeach
                                     </select>
-                                    @error('doctor_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    @error('doctor_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                 </div>
 
                                 <!-- Date -->
                                 <div class="col-md-6">
                                     <label for="appointment_date" class="form-label fw-semibold">Date <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control @error('appointment_date') is-invalid @enderror" id="appointment_date" name="appointment_date" value="{{ old('appointment_date') }}" min="{{ date('Y-m-d') }}" required>
-                                    @error('appointment_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    @error('appointment_date')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                 </div>
 
                                 <!-- Time -->
@@ -115,14 +131,15 @@
                                         <option value="16:00" {{ old('appointment_time') == '16:00' ? 'selected' : '' }}>04:00 PM</option>
                                         <option value="17:00" {{ old('appointment_time') == '17:00' ? 'selected' : '' }}>05:00 PM</option>
                                     </select>
-                                    @error('appointment_time')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    @error('appointment_time')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                 </div>
 
                                 <!-- Message -->
                                 <div class="col-12">
                                     <label for="message" class="form-label fw-semibold">Additional Message</label>
-                                    <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="4" placeholder="Any specific concerns...">{{ old('message') }}</textarea>
-                                    @error('message')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="4" placeholder="Any specific concerns..." maxlength="1000">{{ old('message') }}</textarea>
+                                    <small class="text-muted">Max 1000 characters</small>
+                                    @error('message')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                 </div>
 
                                 <!-- Submit -->
@@ -182,6 +199,40 @@
         easing: 'ease-in-out',
         once: true,
         offset: 100
+    });
+
+    // Dynamic treatment loading
+    document.addEventListener('DOMContentLoaded', function() {
+        const serviceSelect = document.getElementById('service_id');
+        const treatmentSelect = document.getElementById('treatment_option_id');
+
+        serviceSelect.addEventListener('change', function() {
+            const serviceId = this.value;
+            
+            if (!serviceId) {
+                treatmentSelect.innerHTML = '<option value="">Choose a treatment...</option>';
+                return;
+            }
+
+            // Fetch treatments for the selected service
+            fetch(`/api/services/${serviceId}/treatments`)
+                .then(response => response.json())
+                .then(data => {
+                    treatmentSelect.innerHTML = '<option value="">Choose a treatment...</option>';
+                    
+                    if (data.treatments && data.treatments.length > 0) {
+                        data.treatments.forEach(treatment => {
+                            const option = document.createElement('option');
+                            option.value = treatment.id;
+                            option.textContent = treatment.name;
+                            treatmentSelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading treatments:', error);
+                });
+        });
     });
 </script>
 @endpush
