@@ -151,69 +151,111 @@
                             <div class="row g-3">
                                 <!-- Name -->
                                 <div class="col-md-6">
-                                    <label for="name" class="form-label">Your Name <span class="text-danger">*</span></label>
+                                    <label for="name" class="form-label fw-bold">
+                                        Your Name
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <input type="text" 
                                            class="form-control @error('name') is-invalid @enderror" 
                                            id="name" 
                                            name="name" 
                                            value="{{ old('name') }}" 
+                                           placeholder="Enter your full name"
+                                           minlength="2"
+                                           maxlength="255"
                                            required>
                                     @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
                                     @enderror
                                 </div>
 
                                 <!-- Email -->
                                 <div class="col-md-6">
-                                    <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                    <label for="email" class="form-label fw-bold">
+                                        Email Address
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <input type="email" 
                                            class="form-control @error('email') is-invalid @enderror" 
                                            id="email" 
                                            name="email" 
                                            value="{{ old('email') }}" 
+                                           placeholder="your.email@example.com"
+                                           maxlength="255"
                                            required>
                                     @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
                                     @enderror
                                 </div>
 
                                 <!-- Phone -->
                                 <div class="col-md-6">
-                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <label for="phone" class="form-label fw-bold">
+                                        Phone Number
+                                        <span class="text-muted">(optional)</span>
+                                    </label>
                                     <input type="tel" 
                                            class="form-control @error('phone') is-invalid @enderror" 
                                            id="phone" 
                                            name="phone" 
-                                           value="{{ old('phone') }}">
+                                           value="{{ old('phone') }}"
+                                           placeholder="+1 (555) 000-0000"
+                                           minlength="10"
+                                           maxlength="20">
                                     @error('phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
                                     @enderror
                                 </div>
 
                                 <!-- Subject -->
                                 <div class="col-md-6">
-                                    <label for="subject" class="form-label">Subject <span class="text-danger">*</span></label>
+                                    <label for="subject" class="form-label fw-bold">
+                                        Subject
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <input type="text" 
                                            class="form-control @error('subject') is-invalid @enderror" 
                                            id="subject" 
                                            name="subject" 
                                            value="{{ old('subject') }}" 
+                                           placeholder="What is this about?"
+                                           minlength="3"
+                                           maxlength="255"
                                            required>
                                     @error('subject')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
                                     @enderror
                                 </div>
 
                                 <!-- Message -->
                                 <div class="col-12">
-                                    <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
+                                    <label for="message" class="form-label fw-bold">
+                                        Message
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <textarea class="form-control @error('message') is-invalid @enderror" 
                                               id="message" 
                                               name="message" 
                                               rows="6" 
+                                              placeholder="Please share your message with us..."
+                                              minlength="10"
+                                              maxlength="2000"
                                               required>{{ old('message') }}</textarea>
+                                    <div class="form-text">
+                                        <small id="charCount">0 / 2000 characters</small>
+                                    </div>
                                     @error('message')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
                                     @enderror
                                 </div>
 
@@ -301,6 +343,28 @@
 
 @push('frontend-scripts')
 <script>
+    // Character counter for message textarea
+    const messageTextarea = document.getElementById('message');
+    const charCount = document.getElementById('charCount');
+    
+    if (messageTextarea && charCount) {
+        messageTextarea.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count + ' / 2000 characters';
+            
+            // Add warning when near limit
+            if (count > 1800) {
+                charCount.classList.add('text-danger');
+            } else {
+                charCount.classList.remove('text-danger');
+            }
+        });
+        
+        // Initialize count on page load
+        const initialCount = messageTextarea.value.length;
+        charCount.textContent = initialCount + ' / 2000 characters';
+    }
+    
     // Auto-dismiss success message after 5 seconds
     setTimeout(function() {
         var alert = document.querySelector('.alert-success');

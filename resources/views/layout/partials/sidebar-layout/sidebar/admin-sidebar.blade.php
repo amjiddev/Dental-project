@@ -117,6 +117,19 @@
     </div>
     <!--end:Menu item-->
 
+    <!--begin:Menu item - Messages-->
+    <div class="menu-item">
+        <a class="menu-link {{ request()->routeIs('admin.contact-messages.*') ? 'active' : '' }}" href="{{ route('admin.contact-messages.index') }}">
+            <span class="menu-icon"><i class="fas fa-envelope fs-2"></i></span>
+            <span class="menu-title">Messages
+                @if($unreadMessagesCount > 0)
+                <span class="badge badge-danger ms-2">{{ $unreadMessagesCount }}</span>
+                @endif
+            </span>
+        </a>
+    </div>
+    <!--end:Menu item-->
+
     <!--begin:Menu item - User Management-->
     <div class="menu-item pt-5">
         <div class="menu-content">

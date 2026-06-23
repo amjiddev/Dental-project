@@ -23,15 +23,6 @@ Route::get('/doctor/{doctor}', [\App\Http\Controllers\Frontend\DoctorController:
 // Services Routes
 Route::get('/services', [\App\Http\Controllers\Frontend\ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/{slug}', [\App\Http\Controllers\Frontend\ServiceController::class, 'show'])->name('services.show');
-// Legacy routes for backward compatibility
-Route::get('/services/operative', [\App\Http\Controllers\Frontend\ServiceController::class, 'operative'])->name('services.operative');
-Route::get('/services/endodontics', [\App\Http\Controllers\Frontend\ServiceController::class, 'endodontics'])->name('services.endodontics');
-Route::get('/services/oral-surgery', [\App\Http\Controllers\Frontend\ServiceController::class, 'oralSurgery'])->name('services.oral-surgery');
-Route::get('/services/prosthodontics', [\App\Http\Controllers\Frontend\ServiceController::class, 'prosthodontics'])->name('services.prosthodontics');
-Route::get('/services/periodontics', [\App\Http\Controllers\Frontend\ServiceController::class, 'periodontics'])->name('services.periodontics');
-Route::get('/services/orthodontics', [\App\Http\Controllers\Frontend\ServiceController::class, 'orthodontics'])->name('services.orthodontics');
-Route::get('/services/pedodontics', [\App\Http\Controllers\Frontend\ServiceController::class, 'pedodontics'])->name('services.pedodontics');
-Route::get('/services/oral-medicine', [\App\Http\Controllers\Frontend\ServiceController::class, 'oralMedicine'])->name('services.oral-medicine');
 
 // Discounts Route
 Route::get('/discounts', [\App\Http\Controllers\Frontend\PageController::class, 'discounts'])->name('discounts');
@@ -65,6 +56,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Admin Routes
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('appointments', \App\Http\Controllers\Admin\AppointmentController::class);
+        Route::get('appointments/{appointment}/handle', [\App\Http\Controllers\Admin\AppointmentController::class, 'handle'])->name('appointments.handle');
+        Route::put('appointments/{appointment}/handle', [\App\Http\Controllers\Admin\AppointmentController::class, 'updateHandle'])->name('appointments.handle-update');
         Route::post('appointments/{appointment}/status', [\App\Http\Controllers\Admin\AppointmentController::class, 'updateStatus'])->name('appointments.status');
         Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
         Route::resource('services.treatment-options', \App\Http\Controllers\Admin\TreatmentOptionController::class)->scoped();
@@ -78,6 +71,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('discounts/{discount}/toggle-status', [\App\Http\Controllers\Admin\DiscountController::class, 'toggleStatus'])->name('discounts.toggle-status');
         Route::resource('expert-tips', \App\Http\Controllers\Admin\ExpertTipController::class);
         Route::post('expert-tips/{expertTip}/toggle-status', [\App\Http\Controllers\Admin\ExpertTipController::class, 'toggleStatus'])->name('expert-tips.toggle-status');
+
+        // Contact Messages Routes
+        Route::resource('contact-messages', \App\Http\Controllers\Admin\ContactMessageController::class, ['only' => ['index', 'show', 'destroy']]);
+        Route::get('contact-messages/unread/count', [\App\Http\Controllers\Admin\ContactMessageController::class, 'getUnread'])->name('contact-messages.unread-count');
 
         // Settings Routes
         Route::get('settings/about', [\App\Http\Controllers\Admin\SettingController::class, 'about'])->name('settings.about');

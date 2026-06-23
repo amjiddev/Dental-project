@@ -58,8 +58,25 @@ class AppointmentController extends Controller
     {
         $appointment->delete();
 
-        return redirect()->route('admin.appointments.index')
-            ->with('success', 'Appointment deleted successfully.');
+        return response()->json(['success' => true, 'message' => 'Appointment deleted successfully.']);
+    }
+
+    public function handle(Appointment $appointment)
+    {
+        $appointment->load(['service', 'doctor']);
+        return response()->json($appointment);
+    }
+
+    public function updateHandle(Request $request, Appointment $appointment)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,confirmed,cancelled,completed',
+            'admin_notes' => 'nullable|string',
+        ]);
+
+        $appointment->update($validated);
+
+        return response()->json(['success' => true, 'message' => 'Appointment updated successfully.']);
     }
 
     public function updateStatus(Request $request, Appointment $appointment)

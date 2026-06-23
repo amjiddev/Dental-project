@@ -5,6 +5,8 @@ namespace App\Providers;
 use Livewire\Livewire;
 use App\Core\KTBootstrap;
 use App\Models\Service;
+use App\Models\ContactMessage;
+use App\Models\Appointment;
 use App\Models\Category;
 use App\Models\ServingCity;
 use App\Models\State;
@@ -47,7 +49,16 @@ class AppServiceProvider extends ServiceProvider
             $view->with(
                 'sidebarServices',
                 Service::orderBy('order', 'asc')->get(['id', 'name'])
+            )->with(
+                'unreadMessagesCount',
+                ContactMessage::unread()->count()
             );
+        });
+
+        View::composer(config('settings.KT_THEME_LAYOUT_DIR').'.partials.sidebar-layout._toolbar', function ($view) {
+            $pendingAppointmentsCount = Appointment::where('status', 'pending')->count();
+
+            $view->with('notificationCount', $pendingAppointmentsCount);
         });
 
         // Share dynamic services with frontend header

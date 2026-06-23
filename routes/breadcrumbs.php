@@ -196,3 +196,15 @@ Breadcrumbs::for('admin.settings.contact', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push('Contact Us Settings', route('admin.settings.contact'));
 });
+
+// Contact Messages
+Breadcrumbs::for('admin.contact-messages.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Contact Messages', route('admin.contact-messages.index'));
+});
+
+// Contact Messages > View
+Breadcrumbs::for('admin.contact-messages.show', function (BreadcrumbTrail $trail, $contactMessage) {
+    $trail->parent('admin.contact-messages.index');
+    $trail->push('Message from ' . $contactMessage->name, route('admin.contact-messages.show', $contactMessage));
+});

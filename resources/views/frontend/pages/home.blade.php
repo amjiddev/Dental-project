@@ -26,7 +26,7 @@
                             <i class="fas fa-calendar-check me-2"></i>
                             Book Appointment
                         </a>
-                        <a href="{{ route('services.operative') }}" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill">
+                        <a href="{{ route('services.index') }}" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill">
                             <i class="fas fa-tooth me-2"></i>
                             Our Services
                         </a>
@@ -400,7 +400,7 @@
                     <a href="{{ route('appointment.create') }}" class="btn btn-light px-4 py-2 rounded-pill fw-semibold">
                         Make Appointment
                     </a>
-                    <a href="{{ route('services.operative') }}" class="btn btn-outline-light px-4 py-2 rounded-pill fw-semibold" 
+                    <a href="{{ route('services.index') }}" class="btn btn-outline-light px-4 py-2 rounded-pill fw-semibold" 
                        style="border: 2px solid white;">
                         All Services
                     </a>

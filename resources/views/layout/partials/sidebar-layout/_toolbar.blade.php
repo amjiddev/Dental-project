@@ -5,6 +5,14 @@
 		@include(config('settings.KT_THEME_LAYOUT_DIR').'/partials/sidebar-layout/_page-title')
 		<!--begin::Actions-->
 		<div class="d-flex align-items-center gap-2 gap-lg-3">
+			<div class="position-relative" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Pending appointments">
+				<i class="bi bi-bell-fill fs-3 text-gray-500"></i>
+				@if(isset($notificationCount) && $notificationCount > 0)
+					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+						{{ $notificationCount }}
+					</span>
+				@endif
+			</div>
 		</div>
 		<!--end::Actions-->
 	</div>

@@ -59,16 +59,27 @@ class PageController extends Controller
     public function contactSubmit(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|min:2|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'nullable|string|max:20',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string|max:2000',
+            'phone' => 'nullable|string|min:10|max:20|regex:/^[0-9\s\-\+\(\)]+$/',
+            'subject' => 'required|string|min:3|max:255',
+            'message' => 'required|string|min:10|max:2000',
+        ], [
+            'name.required' => 'Please enter your name.',
+            'name.min' => 'Name must be at least 2 characters.',
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'Please enter a valid email address.',
+            'phone.regex' => 'Please enter a valid phone number.',
+            'subject.required' => 'Please enter a subject.',
+            'subject.min' => 'Subject must be at least 3 characters.',
+            'message.required' => 'Please enter your message.',
+            'message.min' => 'Message must be at least 10 characters.',
+            'message.max' => 'Message cannot exceed 2000 characters.',
         ]);
 
-        // Here you can send email or store in database
-        // For now, just return success message
-        
+        // Store the message in the database
+        \App\Models\ContactMessage::create($validated);
+
         return redirect()->back()->with('success', 'Thank you for contacting us! We will get back to you soon.');
     }
 
