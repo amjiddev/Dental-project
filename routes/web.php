@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\Apps\PermissionManagementController;
-use App\Http\Controllers\Apps\RoleManagementController;
-use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,13 +48,6 @@ Route::post('/appointment', [\App\Http\Controllers\Frontend\AppointmentControlle
 // Authenticated Routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    // User Management Routes
-    Route::prefix('user-management')->name('user-management.')->group(function () {
-        Route::resource('users', UserManagementController::class);
-        Route::resource('roles', RoleManagementController::class);
-        Route::resource('permissions', PermissionManagementController::class);
-    });
 
     // Admin Routes
     Route::prefix('admin')->name('admin.')->group(function () {
