@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\Apps\PermissionManagementController;
-use App\Http\Controllers\Apps\RoleManagementController;
-use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,19 +43,13 @@ Route::post('/appointment', [\App\Http\Controllers\Frontend\AppointmentControlle
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // User Management Routes
-    Route::prefix('user-management')->name('user-management.')->group(function () {
-        Route::resource('users', UserManagementController::class);
-        Route::resource('roles', RoleManagementController::class);
-        Route::resource('permissions', PermissionManagementController::class);
-    });
-
     // Admin Routes
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('appointments', \App\Http\Controllers\Admin\AppointmentController::class);
         Route::get('appointments/{appointment}/handle', [\App\Http\Controllers\Admin\AppointmentController::class, 'handle'])->name('appointments.handle');
         Route::put('appointments/{appointment}/handle', [\App\Http\Controllers\Admin\AppointmentController::class, 'updateHandle'])->name('appointments.handle-update');
         Route::post('appointments/{appointment}/status', [\App\Http\Controllers\Admin\AppointmentController::class, 'updateStatus'])->name('appointments.status');
+        Route::post('appointments/{appointment}/mark-as-seen', [\App\Http\Controllers\Admin\AppointmentController::class, 'markAsSeen'])->name('appointments.mark-as-seen');
         Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
         Route::resource('services.treatment-options', \App\Http\Controllers\Admin\TreatmentOptionController::class)->scoped();
         Route::post('services/{service}/treatment-options/{treatmentOption}/toggle-status', [\App\Http\Controllers\Admin\TreatmentOptionController::class, 'toggleStatus'])->name('services.treatment-options.toggle-status');
@@ -75,6 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Contact Messages Routes
         Route::resource('contact-messages', \App\Http\Controllers\Admin\ContactMessageController::class, ['only' => ['index', 'show', 'destroy']]);
         Route::get('contact-messages/unread/count', [\App\Http\Controllers\Admin\ContactMessageController::class, 'getUnread'])->name('contact-messages.unread-count');
+        Route::post('contact-messages/{contactMessage}/mark-as-read', [\App\Http\Controllers\Admin\ContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-as-read');
 
         // Settings Routes
         Route::get('settings/about', [\App\Http\Controllers\Admin\SettingController::class, 'about'])->name('settings.about');

@@ -59,14 +59,15 @@ class PageController extends Controller
     public function contactSubmit(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|min:2|max:255',
-            'email' => 'required|email|max:255',
+            'name' => 'required|string|min:2|max:255|regex:/^[a-zA-Z\s]+$/',
+            'email' => 'required|email:rfc,dns|max:255',
             'phone' => 'nullable|string|min:10|max:20|regex:/^[0-9\s\-\+\(\)]+$/',
             'subject' => 'required|string|min:3|max:255',
             'message' => 'required|string|min:10|max:2000',
         ], [
             'name.required' => 'Please enter your name.',
             'name.min' => 'Name must be at least 2 characters.',
+            'name.regex' => 'Name can only contain letters and spaces, no numbers allowed.',
             'email.required' => 'Please enter your email address.',
             'email.email' => 'Please enter a valid email address.',
             'phone.regex' => 'Please enter a valid phone number.',

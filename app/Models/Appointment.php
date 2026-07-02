@@ -21,6 +21,7 @@ class Appointment extends Model
         'message',
         'status',
         'admin_notes',
+        'is_seen',
     ];
 
     protected $casts = [
@@ -52,5 +53,11 @@ class Appointment extends Model
         return $query->where('appointment_date', '>=', now()->toDateString())
                      ->orderBy('appointment_date', 'asc')
                      ->orderBy('appointment_time', 'asc');
+    }
+
+    public function markAsSeen()
+    {
+        $this->update(['is_seen' => true]);
+        return $this;
     }
 }

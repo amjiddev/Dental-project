@@ -12,8 +12,40 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        $appointments = Appointment::with(['service', 'doctor'])
-            ->orderBy('appointment_date', 'desc')
+        $query = Appointment::with(['service', 'doctor']);
+        
+        // Filter pending appointments if requested from notifications
+        if (request()->has('filter') && request('filter') === 'pending') {
+            $query = $query->where('status', 'pending');
+        }
+        
+        // Handle AJAX request for modal
+        if (request()->has('ajax') && request('ajax') === 'true' && request()->expectsJson()) {
+            $appointments = $query->orderBy('appointment_date', 'desc')
+                ->orderBy('appointment_time', 'desc')
+                ->limit(50)
+                ->get();
+            
+            return response()->json([
+                'appointments' => $appointments->map(function ($appt) {
+                    return [
+                        'id' => $appt->id,
+                        'name' => $appt->name,
+                        'email' => $appt->email,
+                        'phone' => $appt->phone,
+                        'service' => $appt->service?->name ?? 'N/A',
+                        'doctor' => $appt->doctor?->name ?? 'N/A',
+                        'date' => $appt->appointment_date->format('M d, Y'),
+                        'time' => date('h:i A', strtotime($appt->appointment_time)),
+                        'message' => $appt->message,
+                        'created_at' => $appt->created_at->format('M d, Y H:i'),
+                        'time_ago' => $appt->created_at->diffForHumans(),
+                    ];
+                })
+            ]);
+        }
+        
+        $appointments = $query->orderBy('appointment_date', 'desc')
             ->orderBy('appointment_time', 'desc')
             ->paginate(15);
         
@@ -103,5 +135,17 @@ class AppointmentController extends Controller
 
         return redirect()->back()
             ->with('success', 'Appointment status updated successfully.');
+    }
+
+    public function markAsSeen(Appointment $appointment)
+    {
+        $appointment->markAsSeen();
+        
+        // Return JSON if AJAX, otherwise redirect
+        if (request()->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+        
+        return redirect()->back()->with('success', 'Appointment marked as seen.');
     }
 }

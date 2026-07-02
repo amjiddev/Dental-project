@@ -205,3 +205,86 @@
     </div>
 
 </x-default-layout>
+
+@push('scripts')
+<script>
+// Auto-hide success and alert messages after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert-success, .alert-danger, .alert-warning, .alert-info');
+    alerts.forEach(function(alert) {
+        setTimeout(function() {
+            // Fade out effect
+            alert.style.transition = 'opacity 0.5s ease-out';
+            alert.style.opacity = '0';
+            
+            // Remove from DOM after fade
+            setTimeout(function() {
+                alert.remove();
+            }, 500);
+        }, 5000); // 5 seconds
+    });
+});
+
+console.log('Contact Messages Script Loaded - Outside DOMContentLoaded');
+
+function markMessageAsRead(messageId) {
+    const url = `/admin/contact-messages/${messageId}/mark-as-read`;
+    console.log('Fetching URL:', url);
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        if (data.success) {
+            console.log('Message marked as read successfully, reloading page...');
+            // Reload the page to reflect changes
+            setTimeout(() => {
+                location.reload();
+            }, 800);
+        } else {
+            console.log('Mark as read failed, data:', data);
+        }
+    })
+    .catch(error => {
+        console.error('Full error object:', error);
+        console.error('Error marking message as read:', error.message);
+    });
+}
+
+// Auto-mark messages as read when modal is shown
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded');
+    
+    // Use event delegation - listen for all clicks
+    document.addEventListener('click', function(e) {
+        // Check if clicked element or parent has data-bs-toggle and data-message-id
+        const button = e.target.closest('[data-message-id]');
+        
+        if (button && button.getAttribute('data-bs-toggle') === 'modal') {
+            const messageId = button.getAttribute('data-message-id');
+            console.log('🔵 View button clicked for message ID:', messageId);
+            
+            // Wait for modal to open then mark as read
+            setTimeout(() => {
+                markMessageAsRead(messageId);
+            }, 300);
+        }
+    });
+    
+    console.log('Event listener attached successfully');
+});
+</script>
+@endpush

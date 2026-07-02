@@ -20,12 +20,8 @@
     <meta name="author" content="" />
 
     <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon.png') }}">
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon.png') }}">
-
-    {{-- <link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}"> --}}
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/media/logos/favicon.svg?v=2024-1') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.svg?v=2024-1') }}">
 
 
     <link rel="stylesheet" href="{{ asset('frontend/css') }}/bootstrap.min.css" />

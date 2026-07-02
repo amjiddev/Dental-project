@@ -62,12 +62,10 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <h5 class="fw-bold mb-3">Contact Us</h5>
                 <ul class="list-unstyled text-white-75">
-                    @if(!empty($contactSettings['contact_address']))
                     <li class="mb-3">
-                        <i class="fas fa-map-marker-alt me-2 text-white"></i>
-                        {{ nl2br(e($contactSettings['contact_address'])) }}
+                        <i class="fas fa-map me-2 text-white"></i>
+                        <a href="https://www.google.com/maps/place/31.82879811855638,70.8997935111553" target="_blank" class="text-white-75 text-decoration-none hover-link">View on Map</a>
                     </li>
-                    @endif
                     @if(!empty($contactSettings['contact_phone']))
                     <li class="mb-3">
                         <i class="fas fa-phone me-2 text-white"></i>

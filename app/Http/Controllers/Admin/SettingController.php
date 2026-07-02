@@ -237,8 +237,6 @@ class SettingController extends Controller
             'contact_instagram' => 'nullable|url|max:255',
             'contact_twitter' => 'nullable|url|max:255',
             'contact_linkedin' => 'nullable|url|max:255',
-            'map_embed_url' => 'nullable|string|max:1000',
-            'map_directions_url' => 'nullable|url|max:500',
         ]);
 
         foreach ($validated as $key => $value) {
@@ -246,9 +244,9 @@ class SettingController extends Controller
         }
 
         // Clear all related caches
-        Cache::forget('app_settings_all');
         Cache::forget('contact_settings');
         Cache::forget('footer_services');
+        Cache::forget('app_settings_all');
 
         return redirect()->route('admin.settings.contact')
             ->with('success', 'Contact Us settings updated successfully.');

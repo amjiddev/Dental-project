@@ -16,6 +16,14 @@
         </div>
 
         <div class="card-body pt-0">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                    <i class="ki-duotone ki-check-circle fs-2 me-2"></i>
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
             <form action="{{ route('admin.settings.contact.update') }}" method="POST">
                 @csrf
                 @method('PUT')
@@ -37,16 +45,10 @@
                         <label class="form-label fw-bold">Subtitle</label>
                         <input type="text" name="contact_subtitle" class="form-control" value="{{ old('contact_subtitle', $settings['contact_subtitle'] ?? 'We\'d love to hear from you. Get in touch with us today!') }}" required>
                     </div>
-
+                    
                     <div class="col-12">
                         <hr class="my-2">
                         <h4 class="fw-bold text-primary mb-3">Contact Information</h4>
-                    </div>
-
-                    <!-- Address -->
-                    <div class="col-12">
-                        <label class="form-label fw-bold">Address</label>
-                        <textarea name="contact_address" class="form-control" rows="2" required>{{ old('contact_address', $settings['contact_address'] ?? '123 Main Street, City, State 12345') }}</textarea>
                     </div>
 
                     <!-- Phone -->
@@ -125,24 +127,6 @@
                         <input type="url" name="contact_linkedin" class="form-control" value="{{ old('contact_linkedin', $settings['contact_linkedin'] ?? 'https://linkedin.com') }}" placeholder="https://linkedin.com/company/yourpage">
                     </div>
 
-                    <div class="col-12">
-                        <hr class="my-2">
-                        <h4 class="fw-bold text-primary mb-3">Google Maps</h4>
-                    </div>
-
-                    <!-- Map Embed URL -->
-                    <div class="col-12">
-                        <label class="form-label fw-bold">Google Maps Embed URL</label>
-                        <textarea name="map_embed_url" class="form-control" rows="3" placeholder="Paste the iframe src URL from Google Maps embed">{{ old('map_embed_url', $settings['map_embed_url'] ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1841!2d-73.9875!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1234567890') }}</textarea>
-                        <div class="form-text">Go to Google Maps → Share → Embed a map → Copy the src URL from the iframe code</div>
-                    </div>
-
-                    <!-- Map Directions URL -->
-                    <div class="col-12">
-                        <label class="form-label fw-bold">Google Maps Directions URL</label>
-                        <input type="url" name="map_directions_url" class="form-control" value="{{ old('map_directions_url', $settings['map_directions_url'] ?? 'https://www.google.com/maps/dir//123+Main+Street+City+State+12345') }}" placeholder="https://www.google.com/maps/dir//Your+Address">
-                        <div class="form-text">URL for the "Get Directions" button</div>
-                    </div>
                 </div>
 
                 <div class="d-flex justify-content-end mt-8">
@@ -154,5 +138,24 @@
             </form>
         </div>
     </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-hide success and alert messages after 5 seconds
+    const alerts = document.querySelectorAll('.alert-success, .alert-danger, .alert-warning, .alert-info');
+    alerts.forEach(function(alert) {
+        setTimeout(function() {
+            // Fade out effect
+            alert.style.transition = 'opacity 0.5s ease-out';
+            alert.style.opacity = '0';
+            
+            // Remove from DOM after fade
+            setTimeout(function() {
+                alert.remove();
+            }, 500);
+        }, 5000); // 5 seconds
+    });
+});
+</script>
 
 </x-default-layout>

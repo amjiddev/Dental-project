@@ -57,8 +57,16 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer(config('settings.KT_THEME_LAYOUT_DIR').'.partials.sidebar-layout._toolbar', function ($view) {
             $pendingAppointmentsCount = Appointment::where('status', 'pending')->count();
+            $unreadMessagesCount = ContactMessage::unread()->count();
+            
+            // Get latest 3 unread messages and pending appointments for modal
+            $latestUnreadMessages = ContactMessage::unread()->latest()->limit(3)->get();
+            $latestPendingAppointments = Appointment::where('status', 'pending')->latest()->limit(3)->get();
 
-            $view->with('notificationCount', $pendingAppointmentsCount);
+            $view->with('notificationCount', $pendingAppointmentsCount)
+                 ->with('unreadMessagesCount', $unreadMessagesCount)
+                 ->with('latestUnreadMessages', $latestUnreadMessages)
+                 ->with('latestPendingAppointments', $latestPendingAppointments);
         });
 
         // Share dynamic services with frontend header

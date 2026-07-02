@@ -201,8 +201,17 @@
         offset: 100
     });
 
-    // Dynamic treatment loading
+    // Auto-hide success and error messages after 5 seconds
     document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert-success, .alert-danger');
+        alerts.forEach(function(alert) {
+            // Auto-hide after 5 seconds (5000 milliseconds)
+            setTimeout(function() {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+
         const serviceSelect = document.getElementById('service_id');
         const treatmentSelect = document.getElementById('treatment_option_id');
 

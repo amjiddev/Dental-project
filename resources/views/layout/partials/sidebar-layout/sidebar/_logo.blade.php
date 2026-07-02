@@ -1,9 +1,13 @@
 <!--begin::Logo-->
 <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
 	<!--begin::Logo image-->
-	<a href="{{ route('dashboard') }}">
+	<a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-2">
 		<img alt="Logo" src="{{ image('logos/default-dark.svg') }}" class="h-25px app-sidebar-logo-default" />
 		<img alt="Logo" src="{{ image('logos/default-small.svg') }}" class="h-20px app-sidebar-logo-minimize" />
+		<div class="d-none d-lg-block">
+			<div class="fw-bold fs-3 text-white">Qasmi Dental</div>
+			<div class="fs-6 text-white-50">&amp; Aesthetic Centre</div>
+		</div>
 	</a>
 	<!--end::Logo image-->
 	<!--begin::Sidebar toggle-->

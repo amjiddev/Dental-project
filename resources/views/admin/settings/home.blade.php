@@ -161,6 +161,21 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Auto-hide success and alert messages after 5 seconds
+    const alerts = document.querySelectorAll('.alert-success, .alert-danger, .alert-warning, .alert-info');
+    alerts.forEach(function(alert) {
+        setTimeout(function() {
+            // Fade out effect
+            alert.style.transition = 'opacity 0.5s ease-out';
+            alert.style.opacity = '0';
+            
+            // Remove from DOM after fade
+            setTimeout(function() {
+                alert.remove();
+            }, 500);
+        }, 5000); // 5 seconds
+    });
+
     const toggles = document.querySelectorAll('.visibility-toggle');
     
     toggles.forEach(toggle => {

@@ -276,7 +276,6 @@
 </section>
 
 <!-- Google Maps Section -->
-@if(!empty($settings['map_embed_url']))
 <section class="py-5 bg-light-blue">
     <div class="container">
         <div class="text-center mb-4">
@@ -286,34 +285,19 @@
 
         <div class="card border-0 shadow-sm overflow-hidden">
             <div class="card-body p-0">
-                <!-- Google Maps Embed -->
-                <div class="google-map-container" style="height: 450px; width: 100%;">
-                    <iframe 
-                        src="{{ $settings['map_embed_url'] }}"
+                <!-- Static Google Maps Embed -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13559.441067865504!2d70.8997935111553!3d31.82879811855638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1782972919919!5m2!1sen!2s" 
                         width="100%" 
                         height="450" 
-                        style="border:0;" 
+                        style="border:0; display: block;" 
                         allowfullscreen="" 
                         loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
+                        referrerpolicy="strict-origin-when-cross-origin">
+                </iframe>
             </div>
         </div>
-
-        @if(!empty($settings['map_directions_url']))
-        <div class="text-center mt-4">
-            <a href="{{ $settings['map_directions_url'] }}" 
-               target="_blank" 
-               class="btn btn-outline-primary">
-                <i class="fas fa-directions me-2"></i>
-                Get Directions
-            </a>
-        </div>
-        @endif
     </div>
 </section>
-@endif
 
 <!-- Quick Contact CTA -->
 <section class="py-5">
@@ -373,5 +357,89 @@
             bsAlert.close();
         }
     }, 5000);
+
+    // Contact form validation
+    const contactForm = document.querySelector('form[action="{{ route("contact.submit") }}"]');
+    if (contactForm) {
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+
+        // Validate name - only letters and spaces
+        if (nameInput) {
+            nameInput.addEventListener('input', function() {
+                const value = this.value;
+                const isValid = /^[a-zA-Z\s]*$/.test(value);
+                
+                if (!isValid && value.length > 0) {
+                    this.classList.add('is-invalid');
+                    // Remove any numbers that were typed
+                    this.value = value.replace(/[0-9]/g, '');
+                } else {
+                    this.classList.remove('is-invalid');
+                }
+            });
+
+            nameInput.addEventListener('blur', function() {
+                const value = this.value.trim();
+                if (value.length > 0 && !/^[a-zA-Z\s]+$/.test(value)) {
+                    this.classList.add('is-invalid');
+                }
+            });
+        }
+
+        // Validate email format
+        if (emailInput) {
+            emailInput.addEventListener('blur', function() {
+                const value = this.value.trim();
+                const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                
+                if (value.length > 0 && !isValidEmail) {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                }
+            });
+
+            emailInput.addEventListener('input', function() {
+                if (this.classList.contains('is-invalid')) {
+                    const value = this.value.trim();
+                    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                    
+                    if (isValidEmail) {
+                        this.classList.remove('is-invalid');
+                    }
+                }
+            });
+        }
+
+        // Form submission validation
+        contactForm.addEventListener('submit', function(e) {
+            const nameValue = nameInput?.value.trim() || '';
+            const emailValue = emailInput?.value.trim() || '';
+
+            let isValid = true;
+
+            // Validate name
+            if (!nameValue || !/^[a-zA-Z\s]+$/.test(nameValue)) {
+                isValid = false;
+                if (nameInput) {
+                    nameInput.classList.add('is-invalid');
+                }
+            }
+
+            // Validate email
+            if (!emailValue || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+                isValid = false;
+                if (emailInput) {
+                    emailInput.classList.add('is-invalid');
+                }
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
 </script>
 @endpush

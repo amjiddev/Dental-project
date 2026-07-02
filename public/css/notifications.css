@@ -1,0 +1,48 @@
+/* Notification Bell Styles */
+#notificationBell {
+    transition: all 0.3s ease;
+    width: auto;
+}
+
+#notificationBell:hover {
+    background-color: rgba(255, 193, 7, 0.1);
+}
+
+#notificationBell .badge {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.5rem;
+}
+
+/* Notification Dropdown - minimal styling */
+.dropdown-menu {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+}
+
+.dropdown-menu h6 {
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.dropdown-menu hr {
+    margin: 1rem 0;
+    border-color: #e5e7eb;
+}
+
+.dropdown-menu .badge {
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+}
+
+.dropdown-menu .btn {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .dropdown-menu {
+        width: 280px !important;
+        max-height: 350px;
+    }
+}
