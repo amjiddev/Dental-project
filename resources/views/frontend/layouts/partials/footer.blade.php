@@ -10,18 +10,26 @@
                     Your trusted partner for comprehensive dental care. We provide quality dental services with a focus on patient comfort and satisfaction.
                 </p>
                 <div class="social-links">
-                    <a href="https://facebook.com" target="_blank" class="btn btn-light btn-sm rounded-circle me-2" title="Facebook">
+                    @if(!empty($contactSettings['contact_facebook']))
+                    <a href="{{ $contactSettings['contact_facebook'] }}" target="_blank" class="btn btn-light btn-sm rounded-circle me-2" title="Facebook">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a href="https://instagram.com" target="_blank" class="btn btn-light btn-sm rounded-circle me-2" title="Instagram">
+                    @endif
+                    @if(!empty($contactSettings['contact_instagram']))
+                    <a href="{{ $contactSettings['contact_instagram'] }}" target="_blank" class="btn btn-light btn-sm rounded-circle me-2" title="Instagram">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="https://twitter.com" target="_blank" class="btn btn-light btn-sm rounded-circle me-2" title="Twitter">
+                    @endif
+                    @if(!empty($contactSettings['contact_twitter']))
+                    <a href="{{ $contactSettings['contact_twitter'] }}" target="_blank" class="btn btn-light btn-sm rounded-circle me-2" title="Twitter">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="https://linkedin.com" target="_blank" class="btn btn-light btn-sm rounded-circle" title="LinkedIn">
+                    @endif
+                    @if(!empty($contactSettings['contact_linkedin']))
+                    <a href="{{ $contactSettings['contact_linkedin'] }}" target="_blank" class="btn btn-light btn-sm rounded-circle" title="LinkedIn">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
+                    @endif
                 </div>
             </div>
 
@@ -34,6 +42,7 @@
                     <li class="mb-2"><a href="{{ route('team') }}" class="text-white-75 text-decoration-none hover-link">Our Team</a></li>
                     <li class="mb-2"><a href="{{ route('discounts') }}" class="text-white-75 text-decoration-none hover-link">Discounts</a></li>
                     <li class="mb-2"><a href="{{ route('gallery') }}" class="text-white-75 text-decoration-none hover-link">Gallery</a></li>
+                    <li class="mb-2"><a href="{{ route('contact') }}" class="text-white-75 text-decoration-none hover-link">Contact Us</a></li>
                 </ul>
             </div>
 
@@ -41,11 +50,11 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <h5 class="fw-bold mb-3">Our Services</h5>
                 <ul class="list-unstyled footer-links">
-                    <li class="mb-2"><a href="{{ route('services.operative') }}" class="text-white-75 text-decoration-none hover-link">Operative Dentistry</a></li>
-                    <li class="mb-2"><a href="{{ route('services.endodontics') }}" class="text-white-75 text-decoration-none hover-link">Endodontics</a></li>
-                    <li class="mb-2"><a href="{{ route('services.periodontics') }}" class="text-white-75 text-decoration-none hover-link">Periodontics</a></li>
-                    <li class="mb-2"><a href="{{ route('services.orthodontics') }}" class="text-white-75 text-decoration-none hover-link">Orthodontics</a></li>
-                    <li class="mb-2"><a href="{{ route('services.prosthodontics') }}" class="text-white-75 text-decoration-none hover-link">Prosthodontics</a></li>
+                    @forelse($footerServices ?? [] as $service)
+                    <li class="mb-2"><a href="{{ route('services.show', $service->slug) }}" class="text-white-75 text-decoration-none hover-link">{{ $service->name }}</a></li>
+                    @empty
+                    <li class="mb-2"><a href="{{ route('services.index') }}" class="text-white-75 text-decoration-none hover-link">View All Services</a></li>
+                    @endforelse
                 </ul>
             </div>
 
@@ -54,23 +63,32 @@
                 <h5 class="fw-bold mb-3">Contact Us</h5>
                 <ul class="list-unstyled text-white-75">
                     <li class="mb-3">
-                        <i class="fas fa-map-marker-alt me-2 text-white"></i>
-                        123 Main Street<br>
-                        <span class="ms-4">City, State 12345</span>
+                        <i class="fas fa-map me-2 text-white"></i>
+                        <a href="https://www.google.com/maps/place/31.82879811855638,70.8997935111553" target="_blank" class="text-white-75 text-decoration-none hover-link">View on Map</a>
                     </li>
+                    @if(!empty($contactSettings['contact_phone']))
                     <li class="mb-3">
                         <i class="fas fa-phone me-2 text-white"></i>
-                        <a href="tel:+15551234567" class="text-white-75 text-decoration-none hover-link">+1 (555) 123-4567</a>
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $contactSettings['contact_phone']) }}" class="text-white-75 text-decoration-none hover-link">{{ $contactSettings['contact_phone'] }}</a>
                     </li>
+                    @endif
+                    @if(!empty($contactSettings['contact_email']))
                     <li class="mb-3">
                         <i class="fas fa-envelope me-2 text-white"></i>
-                        <a href="mailto:info@dentalclinic.com" class="text-white-75 text-decoration-none hover-link">info@dentalclinic.com</a>
+                        <a href="mailto:{{ $contactSettings['contact_email'] }}" class="text-white-75 text-decoration-none hover-link">{{ $contactSettings['contact_email'] }}</a>
                     </li>
+                    @endif
+                    @if(!empty($contactSettings['contact_hours_weekday']) || !empty($contactSettings['contact_hours_saturday']))
                     <li class="mb-3">
                         <i class="fas fa-clock me-2 text-white"></i>
-                        Mon - Fri: 9:00 AM - 6:00 PM<br>
-                        <span class="ms-4">Sat: 9:00 AM - 2:00 PM</span>
+                        @if(!empty($contactSettings['contact_hours_weekday']))
+                        Mon - Fri: {{ $contactSettings['contact_hours_weekday'] }}<br>
+                        @endif
+                        @if(!empty($contactSettings['contact_hours_saturday']))
+                        <span class="ms-4">Sat: {{ $contactSettings['contact_hours_saturday'] }}</span>
+                        @endif
                     </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -92,9 +110,11 @@
 </footer>
 
 <!-- WhatsApp Floating Button -->
-<a href="https://wa.me/1234567890" target="_blank" class="whatsapp-float" title="Chat on WhatsApp">
+@if(!empty($contactSettings['contact_whatsapp']))
+<a href="https://wa.me/{{ $contactSettings['contact_whatsapp'] }}" target="_blank" class="whatsapp-float" title="Chat on WhatsApp">
     <i class="fab fa-whatsapp"></i>
 </a>
+@endif
 
 <style>
 /* Footer Styles */

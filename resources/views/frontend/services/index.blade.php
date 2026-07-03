@@ -38,19 +38,19 @@
                 <div class="card h-100 border-0 shadow-sm service-card">
                     <div class="row g-0">
                         <div class="col-md-5">
-                            <img src="{{ asset($service['image']) }}" 
+                            <img src="{{ $service->image ? asset($service->image) : asset('frontend/images/default-service.jpg') }}" 
                                  class="img-fluid h-100 w-100" 
-                                 alt="{{ $service['title'] }}"
+                                 alt="{{ $service->name }}"
                                  style="object-fit: cover; border-radius: 12px 0 0 12px;">
                         </div>
                         <div class="col-md-7">
                             <div class="card-body p-4">
                                 <div class="mb-3">
-                                    <i class="{{ $service['icon'] }} text-primary" style="font-size: 2rem;"></i>
+                                    <i class="{{ $service->icon }} text-primary" style="font-size: 2rem;"></i>
                                 </div>
-                                <h5 class="card-title fw-bold mb-3">{{ $service['title'] }}</h5>
-                                <p class="card-text text-muted mb-4">{{ $service['description'] }}</p>
-                                <a href="{{ route($service['route']) }}" class="btn btn-primary rounded-pill px-4">
+                                <h5 class="card-title fw-bold mb-3">{{ $service->name }}</h5>
+                                <p class="card-text text-muted mb-4">{{ $service->short_description ?? $service->description }}</p>
+                                <a href="{{ route('services.show', $service->slug) }}" class="btn btn-primary rounded-pill px-4">
                                     <i class="fas fa-arrow-right me-2"></i>Learn More
                                 </a>
                             </div>

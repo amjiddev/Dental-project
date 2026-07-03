@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Livewire\Livewire;
 use App\Core\KTBootstrap;
+use App\Models\Service;
+use App\Models\ContactMessage;
+use App\Models\Appointment;
 use App\Models\Category;
 use App\Models\ServingCity;
 use App\Models\State;
@@ -41,6 +44,38 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
 
         KTBootstrap::init();
+
+        View::composer('layout.partials.sidebar-layout.sidebar.admin-sidebar', function ($view) {
+            $view->with(
+                'sidebarServices',
+                Service::orderBy('order', 'asc')->get(['id', 'name'])
+            )->with(
+                'unreadMessagesCount',
+                ContactMessage::unread()->count()
+            );
+        });
+
+        View::composer(config('settings.KT_THEME_LAYOUT_DIR').'.partials.sidebar-layout._toolbar', function ($view) {
+            $pendingAppointmentsCount = Appointment::where('status', 'pending')->count();
+            $unreadMessagesCount = ContactMessage::unread()->count();
+            
+            // Get latest 3 unread messages and pending appointments for modal
+            $latestUnreadMessages = ContactMessage::unread()->latest()->limit(3)->get();
+            $latestPendingAppointments = Appointment::where('status', 'pending')->latest()->limit(3)->get();
+
+            $view->with('notificationCount', $pendingAppointmentsCount)
+                 ->with('unreadMessagesCount', $unreadMessagesCount)
+                 ->with('latestUnreadMessages', $latestUnreadMessages)
+                 ->with('latestPendingAppointments', $latestPendingAppointments);
+        });
+
+        // Share dynamic services with frontend header
+        View::composer('frontend.layouts.partials.header', function ($view) {
+            $view->with(
+                'frontendServices',
+                Service::active()->ordered()->get(['id', 'name', 'slug'])
+            );
+        });
 
         if (app()->environment('production')) {
             Livewire::setUpdateRoute(function ($handle) {

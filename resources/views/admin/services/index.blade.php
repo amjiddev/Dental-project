@@ -22,21 +22,13 @@
         </div>
 
         <div class="card-body pt-0">
-            @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            @endif
-
             <div class="table-responsive">
                 <table class="table table-row-bordered table-row-gray-300 align-middle gs-0 gy-4">
                     <thead>
                         <tr class="fw-bold text-muted bg-light">
-                            <th class="ps-4 min-w-50px">Order</th>
-                            <th class="min-w-200px">Service Name</th>
-                            <th class="min-w-150px">Price</th>
-                            <th class="min-w-100px">Duration</th>
+                            <th class="min-w-200px">Service </th>
+                            <th class="min-w-150px">Name</th>
+                            <th class="min-w-100px">Description</th>
                             <th class="min-w-100px">Status</th>
                             <th class="min-w-100px text-end pe-4">Actions</th>
                         </tr>
@@ -44,9 +36,7 @@
                     <tbody>
                         @forelse($services as $service)
                         <tr>
-                            <td class="ps-4">
-                                <span class="text-gray-800 fw-bold">{{ $service->order ?? '-' }}</span>
-                            </td>
+
                             <td>
                                 <div class="d-flex align-items-center">
                                     @if($service->image)
@@ -55,54 +45,70 @@
                                     </div>
                                     @endif
                                     <div class="d-flex flex-column">
-                                        <span class="text-gray-800 fw-bold">{{ $service->name }}</span>
-                                        @if($service->short_description)
-                                        <span class="text-muted fs-7">{{ Str::limit($service->short_description, 50) }}</span>
-                                        @endif
+                                        
+
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                @if($service->price)
-                                <span class="text-gray-800 fw-bold">${{ number_format($service->price, 2) }}</span>
-                                @else
-                                <span class="text-muted">-</span>
-                                @endif
+                                <span class="text-gray-800 fw-bold">{{ $service->name }}</span>
                             </td>
                             <td>
-                                @if($service->duration_minutes)
-                                <span class="text-gray-800">{{ $service->duration_minutes }} min</span>
-                                @else
-                                <span class="text-muted">-</span>
-                                @endif
+                                        @if($service->short_description)
+                                        <span class="text-muted fs-7">{{ Str::limit($service->short_description, 50) }}</span>
+                                        @endif
                             </td>
                             <td>
-                                @if($service->is_active)
-                                <span class="badge badge-light-success">Active</span>
-                                @else
-                                <span class="badge badge-light-danger">Inactive</span>
-                                @endif
+                                <button type="button" class="btn btn-sm status-badge" data-service-id="{{ $service->id }}" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                    @if($service->is_active)
+                                    <span class="badge badge-light-success">Active</span>
+                                    @else
+                                    <span class="badge badge-light-danger">Inactive</span>
+                                    @endif
+                                </button>
                             </td>
                             <td class="text-end pe-4">
-                                <a href="{{ route('admin.services.edit', $service->id) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="Edit">
-                                    <i class="ki-duotone ki-pencil fs-2">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
+                                <a href="{{ route('admin.services.treatment-options.index', $service->id) }}"
+                                   class="btn btn-sm btn-light-primary me-2" title="Treatment Options">
+                                    Treatments
                                 </a>
-                                <form action="{{ route('admin.services.destroy', $service->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this service?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm" title="Delete">
-                                        <i class="ki-duotone ki-trash fs-2">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                            <span class="path3"></span>
-                                            <span class="path4"></span>
-                                            <span class="path5"></span>
-                                        </i>
-                                    </button>
-                                </form>
+                                <a href="{{ route('admin.services.edit', $service->id) }}" 
+                                   class="btn btn-sm btn-primary me-2" title="Edit">
+                                    <i class="ki-duotone ki-pencil fs-2"></i>
+                                    Edit
+                                </a>
+                                <button type="button" 
+                                        class="btn btn-sm btn-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal{{ $service->id }}"
+                                        title="Delete">
+                                    <i class="ki-duotone ki-trash fs-2"></i>
+                                    Delete
+                                </button>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteModal{{ $service->id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete Service</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete this service?</p>
+                                                <p class="text-danger fw-bold">This action cannot be undone.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{ route('admin.services.destroy', $service->id) }}" method="POST" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -128,3 +134,40 @@
     </div>
 
 </x-default-layout>
+
+<script>
+document.querySelectorAll('.status-badge').forEach(button => {
+    button.addEventListener('click', function() {
+        const serviceId = this.getAttribute('data-service-id');
+        const badge = this.querySelector('.badge');
+        const originalText = badge.textContent;
+        badge.textContent = 'Loading...';
+        
+        fetch(`/admin/services/${serviceId}/toggle-status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.is_active) {
+                    badge.classList.remove('badge-light-danger');
+                    badge.classList.add('badge-light-success');
+                    badge.textContent = 'Active';
+                } else {
+                    badge.classList.remove('badge-light-success');
+                    badge.classList.add('badge-light-danger');
+                    badge.textContent = 'Inactive';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            badge.textContent = originalText;
+        });
+    });
+});
+</script>

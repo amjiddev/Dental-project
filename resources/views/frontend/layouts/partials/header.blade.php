@@ -25,11 +25,9 @@
                 <!-- 2. About Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('about*') || request()->routeIs('team') ? 'active' : '' }}" 
-                       href="#" 
+                       href="{{ route('about') }}" 
                        id="aboutDropdown" 
-                       role="button" 
-                       data-bs-toggle="dropdown" 
-                       aria-expanded="false">
+                       role="button">
                         About <i class="fas fa-chevron-down ms-1" style="font-size: 0.7rem;"></i>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
@@ -43,20 +41,15 @@
                     <a class="nav-link dropdown-toggle {{ request()->routeIs('services.*') ? 'active' : '' }}" 
                        href="{{ route('services.index') }}" 
                        id="servicesDropdown" 
-                       role="button" 
-                       data-bs-toggle="dropdown" 
-                       aria-expanded="false">
+                       role="button">
                         Services <i class="fas fa-chevron-down ms-1" style="font-size: 0.7rem;"></i>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                        <li><a class="dropdown-item" href="{{ route('services.operative') }}">Operative (Restorative & Cosmetic)</a></li>
-                        <li><a class="dropdown-item" href="{{ route('services.endodontics') }}">Endodontics</a></li>
-                        <li><a class="dropdown-item" href="{{ route('services.oral-surgery') }}">Oral & Maxillofacial Surgery</a></li>
-                        <li><a class="dropdown-item" href="{{ route('services.prosthodontics') }}">Prosthodontics</a></li>
-                        <li><a class="dropdown-item" href="{{ route('services.periodontics') }}">Periodontics & Implantology</a></li>
-                        <li><a class="dropdown-item" href="{{ route('services.orthodontics') }}">Orthodontics</a></li>
-                        <li><a class="dropdown-item" href="{{ route('services.pedodontics') }}">Pedodontics</a></li>
-                        <li><a class="dropdown-item" href="{{ route('services.oral-medicine') }}">Oral Medicine & Diagnostic Science</a></li>
+                        @forelse($frontendServices ?? [] as $service)
+                        <li><a class="dropdown-item" href="{{ route('services.show', $service->slug) }}">{{ $service->name }}</a></li>
+                        @empty
+                        <li><a class="dropdown-item" href="{{ route('services.index') }}">View All Services</a></li>
+                        @endforelse
                     </ul>
                 </li>
                 
@@ -70,6 +63,11 @@
                     <a class="nav-link {{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">Gallery</a>
                 </li>
                 
+                <!-- 6. Contact Us -->
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
+                </li>
+                
                 <li class="nav-item ms-lg-3">
                     <a class="btn btn-primary px-4" href="{{ route('appointment.create') }}">
                         <i class="fas fa-calendar-check me-2"></i>Book Appointment
@@ -80,14 +78,48 @@
     </div>
 </nav>
 
+<!-- Spacer for fixed navbar -->
+<div class="navbar-spacer"></div>
+
 <script>
-// Hover functionality for dropdowns on desktop
+// Smart sticky navbar - hide on scroll down, show on scroll up
 document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.navbar');
+    let lastScrollTop = 0;
+    const scrollThreshold = 100; // Only hide after scrolling past 100px
+    
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Always show navbar at the top
+        if (scrollTop < scrollThreshold) {
+            navbar.classList.remove('navbar-hidden');
+            lastScrollTop = scrollTop;
+            return;
+        }
+        
+        // Scrolling down - hide navbar
+        if (scrollTop > lastScrollTop) {
+            navbar.classList.add('navbar-hidden');
+        } 
+        // Scrolling up - show navbar
+        else {
+            navbar.classList.remove('navbar-hidden');
+        }
+        
+        lastScrollTop = scrollTop;
+    }, { passive: true });
+    
+    // Hover functionality for dropdowns on desktop
     if (window.innerWidth >= 992) {
         const dropdowns = document.querySelectorAll('.navbar .dropdown');
         
         dropdowns.forEach(function(dropdown) {
+            let timeout;
+            
             dropdown.addEventListener('mouseenter', function() {
+                clearTimeout(timeout);
+                this.classList.add('show');
                 const menu = this.querySelector('.dropdown-menu');
                 if (menu) {
                     menu.classList.add('show');
@@ -95,10 +127,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             dropdown.addEventListener('mouseleave', function() {
-                const menu = this.querySelector('.dropdown-menu');
-                if (menu) {
-                    menu.classList.remove('show');
-                }
+                timeout = setTimeout(() => {
+                    this.classList.remove('show');
+                    const menu = this.querySelector('.dropdown-menu');
+                    if (menu) {
+                        menu.classList.remove('show');
+                    }
+                }, 150);
             });
         });
     }
@@ -108,7 +143,21 @@ document.addEventListener('DOMContentLoaded', function() {
 <style>
 .navbar {
     padding: 1rem 0;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1030 !important;
+}
+
+/* Add spacing below navbar so content isn't hidden behind it */
+.navbar-spacer {
+    height: 76px;
+}
+
+.navbar.navbar-hidden {
+    transform: translateY(-100%);
 }
 
 .navbar-brand {
@@ -165,22 +214,39 @@ document.addEventListener('DOMContentLoaded', function() {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 0.5rem 0;
-    margin-top: 0.5rem;
+    margin-top: 0;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
 }
 
 .dropdown-menu.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    pointer-events: auto;
 }
 
 /* Hover to open dropdown on desktop */
 @media (min-width: 992px) {
-    .nav-item.dropdown:hover .dropdown-menu {
+    .nav-item.dropdown {
+        padding-bottom: 1rem;
+        margin-bottom: -1rem;
+    }
+    
+    .nav-item.dropdown:hover .dropdown-menu,
+    .nav-item.dropdown.show .dropdown-menu {
         display: block;
         opacity: 1;
         visibility: visible;

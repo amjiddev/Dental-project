@@ -84,8 +84,12 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&h=600&fit=crop" 
-                     alt="Dental Clinic" 
+                @php
+                    $aboutImg = $settings['about_image'] ?? 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&h=600&fit=crop';
+                    $aboutImgSrc = str_starts_with($aboutImg, 'http') ? $aboutImg : asset($aboutImg);
+                @endphp
+                <img src="{{ $aboutImgSrc }}"
+                     alt="Dental Clinic"
                      class="img-fluid rounded shadow">
             </div>
         </div>

@@ -30,11 +30,16 @@ class DoctorController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'experience_years' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
             'order' => 'nullable|integer|min:0',
         ]);
 
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
+        $validated['is_lead_doctor'] = $request->has('is_lead_doctor') ? 1 : 0;
+
+        // If setting as lead doctor, unset previous lead doctor
+        if ($validated['is_lead_doctor']) {
+            Doctor::where('is_lead_doctor', true)->update(['is_lead_doctor' => false]);
+        }
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -70,11 +75,16 @@ class DoctorController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'experience_years' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
             'order' => 'nullable|integer|min:0',
         ]);
 
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
+        $validated['is_lead_doctor'] = $request->has('is_lead_doctor') ? 1 : 0;
+
+        // If setting as lead doctor, unset previous lead doctor
+        if ($validated['is_lead_doctor']) {
+            Doctor::where('id', '!=', $doctor->id)->update(['is_lead_doctor' => false]);
+        }
 
         if ($request->hasFile('image')) {
             // Delete old image
@@ -105,5 +115,17 @@ class DoctorController extends Controller
 
         return redirect()->route('admin.doctors.index')
             ->with('success', 'Doctor deleted successfully.');
+    }
+
+    public function toggleStatus(Doctor $doctor)
+    {
+        $doctor->update([
+            'is_active' => !$doctor->is_active
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $doctor->is_active,
+        ]);
     }
 }

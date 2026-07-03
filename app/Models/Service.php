@@ -15,6 +15,8 @@ class Service extends Model
         'slug',
         'short_description',
         'description',
+        'key_highlights',
+        'why_choose_features',
         'icon',
         'image',
         'price',
@@ -26,6 +28,8 @@ class Service extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'price' => 'decimal:2',
+        'key_highlights' => 'array',
+        'why_choose_features' => 'array',
     ];
 
     protected static function boot()
@@ -42,6 +46,11 @@ class Service extends Model
     public function appointments()
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function treatmentOptions()
+    {
+        return $this->hasMany(TreatmentOption::class)->orderBy('order', 'asc');
     }
 
     public function scopeActive($query)

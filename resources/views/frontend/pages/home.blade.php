@@ -7,30 +7,38 @@
 
 <!-- Hero Section -->
 <section class="hero-section position-relative" style="margin: 0; padding: 0;">
-    <div class="hero-background" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); min-height: 100vh; display: flex; align-items: center;">
+    @php
+        $heroImg = $settings['home_hero_image'] ?? null;
+        $heroBgStyle = $heroImg ? "background: linear-gradient(135deg, rgba(30, 64, 175, 0.85) 0%, rgba(59, 130, 246, 0.85) 100%), url('" . asset($heroImg) . "'); background-size: cover; background-position: center;" : "background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);";
+    @endphp
+    <div class="hero-background" style="{{ $heroBgStyle }} min-height: 100vh; display: flex; align-items: center;">
         <div class="container">
             <div class="row align-items-center" style="min-height: auto; padding: 40px 0;">
                 <div class="col-lg-7 text-white" data-aos="fade-right">
                     <h1 class="display-2 fw-bold mb-4 text-white" style="font-family: var(--font-heading); line-height: 1.2;">
-                        We bring together expert dental and aesthetic care
+                        {{ $settings['home_hero_title'] ?? 'We bring together expert dental and aesthetic care' }}
                     </h1>
                     <p class="lead mb-5" style="font-size: 1.2rem; line-height: 1.8; max-width: 600px;">
-                        We bring together expert dental and aesthetic care with a passion for creating healthy, beautiful smiles & skins. Every treatment is tailored to your needs, ensuring comfort and results that last.
+                        {{ $settings['home_hero_description'] ?? 'We bring together expert dental and aesthetic care with a passion for creating healthy, beautiful smiles & skins. Every treatment is tailored to your needs, ensuring comfort and results that last.' }}
                     </p>
                     <div class="d-flex gap-3 flex-wrap">
                         <a href="{{ route('appointment.create') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill">
                             <i class="fas fa-calendar-check me-2"></i>
                             Book Appointment
                         </a>
-                        <a href="{{ route('services.operative') }}" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill">
+                        <a href="{{ route('services.index') }}" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill">
                             <i class="fas fa-tooth me-2"></i>
                             Our Services
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-5 d-none d-lg-block" data-aos="fade-left">
-                    <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=600&h=600&fit=crop" 
-                         alt="Dental Care" 
+                    @php
+                        $heroSideImg = $settings['home_hero_image'] ?? 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=600&h=600&fit=crop';
+                        $heroSideImgSrc = str_starts_with($heroSideImg, 'http') ? $heroSideImg : asset($heroSideImg);
+                    @endphp
+                    <img src="{{ $heroSideImgSrc }}"
+                         alt="Dental Care"
                          class="img-fluid rounded-4 shadow-lg"
                          style="max-width: 100%; border-radius: 20px !important;">
                 </div>
@@ -43,45 +51,17 @@
 <section class="py-4 bg-light">
     <div class="container">
         <div class="row g-4 text-center">
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            @for($i = 1; $i <= 4; $i++)
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="{{ $i * 100 }}">
                 <div class="stats-card p-3">
                     <div class="stats-icon mb-2">
-                        <i class="fas fa-tooth text-primary" style="font-size: 2.5rem;"></i>
+                        <i class="{{ $settings['home_stat_' . $i . '_icon'] ?? ($i == 1 ? 'fas fa-tooth' : ($i == 2 ? 'fas fa-user-md' : ($i == 3 ? 'fas fa-smile' : 'fas fa-award'))) }} text-primary" style="font-size: 2.5rem;"></i>
                     </div>
-                    <h2 class="stats-number fw-bold mb-1" data-count="10">0</h2>
-                    <p class="text-muted mb-0 fw-semibold small">Years of Expertise</p>
+                    <h2 class="stats-number fw-bold mb-1" data-count="{{ $settings['home_stat_' . $i . '_number'] ?? ($i == 1 ? '10' : ($i == 2 ? '6' : ($i == 3 ? '2300' : '500'))) }}">0</h2>
+                    <p class="text-muted mb-0 fw-semibold small">{{ $settings['home_stat_' . $i . '_label'] ?? ($i == 1 ? 'Years of Expertise' : ($i == 2 ? 'Expert Doctors' : ($i == 3 ? 'Satisfied Patients' : 'Successful Treatments'))) }}</p>
                 </div>
             </div>
-            
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="stats-card p-3">
-                    <div class="stats-icon mb-2">
-                        <i class="fas fa-user-md text-primary" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h2 class="stats-number fw-bold mb-1" data-count="6">0</h2>
-                    <p class="text-muted mb-0 fw-semibold small">Expert Doctors</p>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="stats-card p-3">
-                    <div class="stats-icon mb-2">
-                        <i class="fas fa-smile text-primary" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h2 class="stats-number fw-bold mb-1" data-count="2300">0</h2>
-                    <p class="text-muted mb-0 fw-semibold small">Satisfied Patients</p>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                <div class="stats-card p-3">
-                    <div class="stats-icon mb-2">
-                        <i class="fas fa-award text-primary" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h2 class="stats-number fw-bold mb-1" data-count="500">0</h2>
-                    <p class="text-muted mb-0 fw-semibold small">Successful Treatments</p>
-                </div>
-            </div>
+            @endfor
         </div>
     </div>
 </section>
@@ -91,20 +71,21 @@
     <div class="container py-5">
         <div class="row align-items-center g-5">
             <div class="col-lg-6" data-aos="fade-right">
-                <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&h=600&fit=crop" 
-                     alt="Dental Clinic" 
+                @php
+                    $aboutImg = $settings['about_image'] ?? 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&h=600&fit=crop';
+                    $aboutImgSrc = str_starts_with($aboutImg, 'http') ? $aboutImg : asset($aboutImg);
+                @endphp
+                <img src="{{ $aboutImgSrc }}"
+                     alt="Dental Clinic"
                      class="img-fluid rounded-4 shadow-lg"
                      style="border-radius: 20px !important;">
             </div>
             <div class="col-lg-6" data-aos="fade-left">
                 <h2 class="display-5 fw-bold mb-4" style="font-family: var(--font-heading); color: var(--primary-blue-dark);">
-                    Creating Beauty Through Healthy Smiles
+                    {{ $settings['home_about_heading'] ?? 'Creating Beauty Through Healthy Smiles' }}
                 </h2>
                 <p class="text-muted mb-4" style="font-size: 1.1rem; line-height: 1.8;">
-                    Welcome to Qasmi Dental & Aesthetic Centre, Lahore's trusted choice for dental and facial aesthetic care. We offer cosmetic and general dentistry, smile makeovers, and advanced facial treatments using modern technology and expert care.
-                </p>
-                <p class="text-muted mb-4" style="font-size: 1.1rem; line-height: 1.8;">
-                    Our skilled team creates personalized plans for your comfort and safety. From routine checkups to whitening, veneers, implants, and facial rejuvenation, we provide lasting results in a modern, welcoming space.
+                    {{ $settings['home_about_description'] ?? "Welcome to Qasmi Dental & Aesthetic Centre, Lahore's trusted choice for dental and facial aesthetic care. We offer cosmetic and general dentistry, smile makeovers, and advanced facial treatments using modern technology and expert care." }}
                 </p>
                 <a href="{{ route('about') }}" class="btn btn-primary btn-lg px-5 rounded-pill">
                     Learn More About Us
@@ -114,6 +95,7 @@
     </div>
 </section>
 
+@if(($settings['home_show_services'] ?? '1') == '1')
 <!-- Services Section -->
 <section class="py-5 bg-light">
     <div class="container py-5">
@@ -418,7 +400,7 @@
                     <a href="{{ route('appointment.create') }}" class="btn btn-light px-4 py-2 rounded-pill fw-semibold">
                         Make Appointment
                     </a>
-                    <a href="{{ route('services.operative') }}" class="btn btn-outline-light px-4 py-2 rounded-pill fw-semibold" 
+                    <a href="{{ route('services.index') }}" class="btn btn-outline-light px-4 py-2 rounded-pill fw-semibold" 
                        style="border: 2px solid white;">
                         All Services
                     </a>
@@ -427,7 +409,9 @@
         </div>
     </div>
 </section>
+@endif
 
+@if(($settings['home_show_excellence'] ?? '1') == '1')
 <!-- Why Choose Us -->
 <section class="py-5 bg-white">
     <div class="container py-5">
@@ -493,7 +477,9 @@
         </div>
     </div>
 </section>
+@endif
 
+@if(($settings['home_show_lead_surgeon'] ?? '1') == '1')
 <!-- Meet Our Lead Surgeon -->
 <section class="py-5 bg-light">
     <div class="container py-5">
@@ -505,8 +491,7 @@
         </div>
 
         <div class="row justify-content-center">
-            @if($doctors->isNotEmpty())
-            @php $leadDoctor = $doctors->first(); @endphp
+            @if($leadDoctor)
             <div class="col-lg-10" data-aos="fade-up">
                 <div class="card border-0 shadow-lg doctor-card">
                     <div class="row g-0">
@@ -517,7 +502,7 @@
                                  alt="{{ $leadDoctor->name }}"
                                  style="object-fit: cover; border-radius: 12px 0 0 12px;">
                             @else
-                            <div class="bg-gradient-blue h-100 d-flex align-items-center justify-content-center" style="border-radius: 12px 0 0 12px;">
+                            <div class="bg-gradient-blue h-100 d-flex align-items-center justify-content-center" style="border-radius: 12px 0 0 12px; min-height: 400px;">
                                 <span class="text-white" style="font-size: 10rem; font-weight: 700;">
                                     {{ substr($leadDoctor->name, 0, 1) }}
                                 </span>
@@ -526,13 +511,15 @@
                         </div>
                         <div class="col-md-7">
                             <div class="card-body p-5">
-                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">Dr. Hafsa Qasmi</h3>
-                                <p class="text-primary mb-3 fw-semibold fs-5">Head Of Department & Assistant Professor</p>
-                                <p class="text-muted small mb-3">MHPE (AKU), BDS (FJDC), CHPE(UoL), Citi Certified (USA), C. Implant (PAID) & C. Aesthetics (PARA)</p>
+                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">Dr. {{ $leadDoctor->name }}</h3>
+                                <p class="text-primary mb-3 fw-semibold fs-5">{{ $leadDoctor->specialization }}</p>
+                                @if($leadDoctor->qualification)
+                                <p class="text-muted small mb-3">{{ $leadDoctor->qualification }}</p>
+                                @endif
                                 <p class="text-muted mb-4" style="line-height: 1.8; font-size: 1.05rem;">
-                                    Dr. Hafsa Qasmi brings years of expertise and a compassionate approach to dental and aesthetic care. She is dedicated to creating healthy, confident smiles while ensuring every patient feels comfortable and cared for. Her passion for excellence and attention to detail make her a trusted leader in her field.
+                                    {{ $leadDoctor->bio }}
                                 </p>
-                                <a href="{{ route('team') }}" class="btn btn-primary btn-lg px-5 rounded-pill">
+                                <a href="{{ route('doctor.show', $leadDoctor->id) }}" class="btn btn-primary btn-lg px-5 rounded-pill">
                                     View Full Profile
                                 </a>
                             </div>
@@ -545,20 +532,19 @@
                 <div class="card border-0 shadow-lg doctor-card">
                     <div class="row g-0">
                         <div class="col-md-5">
-                            <div class="bg-gradient-blue h-100 d-flex align-items-center justify-content-center" style="min-height: 400px; border-radius: 12px 0 0 12px;">
+                            <div class="bg-gradient-blue h-100 d-flex align-items-center justify-content-center" style="border-radius: 12px 0 0 12px; min-height: 400px;">
                                 <i class="fas fa-user-md text-white" style="font-size: 8rem;"></i>
                             </div>
                         </div>
                         <div class="col-md-7">
                             <div class="card-body p-5">
-                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">Dr. Salima Naveed Manji</h3>
-                                <p class="text-primary mb-3 fw-semibold fs-5">Head Of Department & Assistant Professor</p>
-                                <p class="text-muted small mb-3">MHPE (AKU), BDS (FJDC), CHPE(UoL), Citi Certified (USA), C. Implant (PAID) & C. Aesthetics (PARA)</p>
+                                <h3 class="fw-bold mb-2" style="font-size: 2rem;">No Lead Doctor Set</h3>
+                                <p class="text-primary mb-3 fw-semibold fs-5">Coming Soon</p>
                                 <p class="text-muted mb-4" style="line-height: 1.8; font-size: 1.05rem;">
-                                    Dr. Salima Naveed Manji brings years of expertise and a compassionate approach to dental and aesthetic care. She is dedicated to creating healthy, confident smiles while ensuring every patient feels comfortable and cared for.
+                                    A lead doctor will be displayed here soon. Please check back later.
                                 </p>
                                 <a href="{{ route('team') }}" class="btn btn-primary btn-lg px-5 rounded-pill">
-                                    View Full Profile
+                                    View Our Team
                                 </a>
                             </div>
                         </div>
@@ -569,8 +555,9 @@
         </div>
     </div>
 </section>
+@endif
 
-
+@if(($settings['home_show_expert_tips'] ?? '1') == '1')
 <!-- Expert Tips Section -->
 <section class="py-5 bg-white">
     <div class="container py-5">
@@ -582,122 +569,64 @@
         </div>
 
         <div class="row g-4">
-            <!-- Tip 1 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            @forelse($tips as $tip)
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($loop->index * 100) }}">
                 <div class="tip-card h-100">
                     <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&h=400&fit=crop" alt="Daily Skincare Routine" class="img-fluid">
+                        @if($tip->image)
+                        <img src="{{ asset($tip->image) }}" alt="{{ $tip->title }}" class="img-fluid" style="object-fit: cover; height: 250px; width: 100%;">
+                        @else
+                        <div style="height: 250px; width: 100%; background: linear-gradient(135deg, #0066FF 0%, #0047BB 100%); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image text-white" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
+                        @endif
                         <div class="tip-overlay">
-                            <span class="tip-category">Skincare</span>
+                            <span class="tip-category">{{ $tip->category }}</span>
                         </div>
                     </div>
                     <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Daily Skincare Routine for Healthy Skin</h5>
-                        <p class="text-muted mb-3">Discover the essential steps for maintaining radiant and healthy skin every day. Learn about cleansing, moisturizing, and sun protection.</p>
-                        <a href="#" class="text-primary fw-semibold">
+                        <h5 class="fw-bold mb-3">{{ $tip->title }}</h5>
+                        <p class="text-muted mb-3">{{ Str::limit($tip->description, 100) }}</p>
+                        <button type="button" class="text-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#tipModal{{ $tip->id }}">
                             Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
-
-            <!-- Tip 2 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=600&h=400&fit=crop" alt="Anti-Aging Tips" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Anti-Aging</span>
-                        </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Top Anti-Aging Treatments & Tips</h5>
-                        <p class="text-muted mb-3">Explore effective anti-aging treatments and lifestyle tips to maintain youthful, glowing skin at any age.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+            @empty
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <p class="text-muted mb-0">No expert tips available at the moment.</p>
                 </div>
             </div>
+            @endforelse
+        </div>
 
-            <!-- Tip 3 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&h=400&fit=crop" alt="Dental Care" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Dental Care</span>
+        <!-- Expert Tip Modals (placed outside loop for proper Bootstrap behavior) -->
+        @foreach($tips as $tip)
+        <div class="modal fade" id="tipModal{{ $tip->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-bold">{{ $tip->title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if($tip->image)
+                        <img src="{{ asset($tip->image) }}" alt="{{ $tip->title }}" class="img-fluid mb-4" style="max-height: 300px; object-fit: cover; width: 100%; border-radius: 8px;" />
+                        @endif
+                        <div class="mb-3">
+                            <span class="badge bg-primary mb-3">{{ $tip->category }}</span>
                         </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Essential Dental Care Tips for a Bright Smile</h5>
-                        <p class="text-muted mb-3">Learn the best practices for maintaining optimal oral health and achieving a confident, beautiful smile.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tip 4 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=600&h=400&fit=crop" alt="Facial Treatments" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Aesthetics</span>
-                        </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Benefits of Professional Facial Treatments</h5>
-                        <p class="text-muted mb-3">Understand how professional facial treatments can rejuvenate your skin and address specific concerns effectively.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tip 5 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&h=400&fit=crop" alt="Nutrition for Skin" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Nutrition</span>
-                        </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Nutrition Tips for Glowing Skin</h5>
-                        <p class="text-muted mb-3">Discover which foods and nutrients can help you achieve naturally radiant and healthy skin from within.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tip 6 -->
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="tip-card h-100">
-                    <div class="tip-image">
-                        <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&h=400&fit=crop" alt="Teeth Whitening" class="img-fluid">
-                        <div class="tip-overlay">
-                            <span class="tip-category">Cosmetic</span>
-                        </div>
-                    </div>
-                    <div class="tip-content p-4">
-                        <h5 class="fw-bold mb-3">Teeth Whitening: What You Need to Know</h5>
-                        <p class="text-muted mb-3">Get insights into professional teeth whitening options and how to maintain your bright smile long-term.</p>
-                        <a href="#" class="text-primary fw-semibold">
-                            Read More <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
+                        <p class="text-muted" style="line-height: 1.8;">{{ nl2br(e($tip->description)) }}</p>
                     </div>
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
 </section>
+@endif
 
 <!-- CTA Section -->
 <section class="py-5 bg-gradient-blue text-white">
