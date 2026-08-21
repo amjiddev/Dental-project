@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -48,22 +49,12 @@ class SettingController extends Controller
                 'about_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             ]);
 
-            $image = $request->file('about_image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $uploadPath = public_path('uploads/about');
-
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0755, true);
-            }
-
-            // Delete old image if exists
             $oldImage = Setting::get('about_image');
-            if ($oldImage && file_exists(public_path($oldImage))) {
-                unlink(public_path($oldImage));
+            if ($oldImage) {
+                ImageUploadService::delete($oldImage);
             }
 
-            $image->move($uploadPath, $imageName);
-            Setting::set('about_image', 'uploads/about/' . $imageName);
+            Setting::set('about_image', ImageUploadService::upload($request->file('about_image'), 'about'));
         }
 
         Cache::forget('app_settings_all');
@@ -130,21 +121,12 @@ class SettingController extends Controller
                 'home_hero_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             ]);
 
-            $image = $request->file('home_hero_image');
-            $imageName = time() . '_hero_' . $image->getClientOriginalName();
-            $uploadPath = public_path('uploads/home');
-
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0755, true);
-            }
-
             $oldImage = Setting::get('home_hero_image');
-            if ($oldImage && file_exists(public_path($oldImage))) {
-                unlink(public_path($oldImage));
+            if ($oldImage) {
+                ImageUploadService::delete($oldImage);
             }
 
-            $image->move($uploadPath, $imageName);
-            Setting::set('home_hero_image', 'uploads/home/' . $imageName);
+            Setting::set('home_hero_image', ImageUploadService::upload($request->file('home_hero_image'), 'home'));
         }
 
         // About image (shared with About Us page)
@@ -153,21 +135,12 @@ class SettingController extends Controller
                 'about_image' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             ]);
 
-            $image = $request->file('about_image');
-            $imageName = time() . '_about_' . $image->getClientOriginalName();
-            $uploadPath = public_path('uploads/about');
-
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0755, true);
-            }
-
             $oldImage = Setting::get('about_image');
-            if ($oldImage && file_exists(public_path($oldImage))) {
-                unlink(public_path($oldImage));
+            if ($oldImage) {
+                ImageUploadService::delete($oldImage);
             }
 
-            $image->move($uploadPath, $imageName);
-            Setting::set('about_image', 'uploads/about/' . $imageName);
+            Setting::set('about_image', ImageUploadService::upload($request->file('about_image'), 'about'));
         }
 
         Cache::forget('app_settings_all');

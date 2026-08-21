@@ -4,7 +4,7 @@
 
 <head>
     <base href="" />
-    <title>@yield('meta_title', 'Qasmi Dental')</title>
+    <title>@yield('meta_title', 'BrightSmile Dental Clinic')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8" />
     <meta name="description" content="@yield('meta_description', '')" />
@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="@yield('meta_title', 'Qasmi Dental')" />
+    <meta property="og:title" content="@yield('meta_title', 'BrightSmile Dental Clinic')" />
     <meta property="og:description" content="@yield('meta_description', '')" />
     <link rel="canonical" href="{{ url()->current() }}" />
     <meta name="api-base" content="{{ env('STORE_URL') }}">
@@ -20,8 +20,8 @@
     <meta name="author" content="" />
 
     <!-- Favicons -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/media/logos/favicon.svg?v=2024-1') }}">
-    <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.svg?v=2024-1') }}">
+    <link rel="icon" type="image/png" href="{{ asset('frontend/images/dental-logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('frontend/images/dental-logo.png') }}">
 
 
     <link rel="stylesheet" href="{{ asset('frontend/css') }}/bootstrap.min.css" />

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExpertTip;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -33,10 +34,7 @@ class ExpertTipController extends Controller
         $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/expert-tips'), $imageName);
-            $validated['image'] = 'uploads/expert-tips/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'expert-tips');
         }
 
         ExpertTip::create($validated);
@@ -64,14 +62,11 @@ class ExpertTipController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete old image
-            if ($expertTip->image && file_exists(public_path($expertTip->image))) {
-                unlink(public_path($expertTip->image));
+            if ($expertTip->image) {
+                ImageUploadService::delete($expertTip->image);
             }
 
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/expert-tips'), $imageName);
-            $validated['image'] = 'uploads/expert-tips/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'expert-tips');
         }
 
         $expertTip->update($validated);
@@ -83,8 +78,8 @@ class ExpertTipController extends Controller
     public function destroy(ExpertTip $expertTip)
     {
         // Delete image
-        if ($expertTip->image && file_exists(public_path($expertTip->image))) {
-            unlink(public_path($expertTip->image));
+        if ($expertTip->image) {
+            ImageUploadService::delete($expertTip->image);
         }
 
         $expertTip->delete();

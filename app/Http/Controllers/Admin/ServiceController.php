@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -39,10 +40,7 @@ class ServiceController extends Controller
         $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/services'), $imageName);
-            $validated['image'] = 'uploads/services/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'services');
         }
 
         $service = Service::create($validated);
@@ -80,14 +78,10 @@ class ServiceController extends Controller
         $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if ($request->hasFile('image')) {
-            if ($service->image && file_exists(public_path($service->image))) {
-                unlink(public_path($service->image));
+            if ($service->image) {
+                ImageUploadService::delete($service->image);
             }
-
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/services'), $imageName);
-            $validated['image'] = 'uploads/services/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'services');
         }
 
         $service->update($validated);
@@ -98,8 +92,8 @@ class ServiceController extends Controller
 
     public function destroy(Service $service)
     {
-        if ($service->image && file_exists(public_path($service->image))) {
-            unlink(public_path($service->image));
+        if ($service->image) {
+            ImageUploadService::delete($service->image);
         }
 
         $service->delete();

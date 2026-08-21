@@ -1,6 +1,6 @@
 @extends('frontend.layouts.frontend')
 
-@section('meta_title', $service['title'] . ' - Manji Dental & Aesthetic Centre')
+@section('meta_title', $service['title'] . ' - BrightSmile Dental Clinic')
 @section('meta_description', $service['description'])
 
 @section('frontend-content')

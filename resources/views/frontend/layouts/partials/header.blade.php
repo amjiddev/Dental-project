@@ -3,9 +3,9 @@
     <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">
             <div class="d-flex align-items-center">
-                <i class="fas fa-tooth text-primary me-2" style="font-size: 2rem;"></i>
+                <img src="{{ asset('frontend/images/dental-logo.png') }}" alt="" class="me-2" style="height: 2rem; width: auto;">
                 <div>
-                    <div class="fw-bold text-primary" style="font-size: 1.3rem; line-height: 1;">Qasmi Dental</div>
+                    <div class="fw-bold text-primary" style="font-size: 1.3rem; line-height: 1;">BrightSmile Dental</div>
                     <div class="text-muted" style="font-size: 0.75rem;">& Aesthetic Centre</div>
                 </div>
             </div>

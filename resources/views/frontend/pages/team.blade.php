@@ -1,6 +1,6 @@
 @extends('frontend.layouts.frontend')
 
-@section('meta_title', 'Our Team - Manji Dental')
+@section('meta_title', 'Our Team - BrightSmile Dental Clinic')
 @section('meta_description', 'Meet our team of experienced dental professionals dedicated to your oral health.')
 
 @section('frontend-content')

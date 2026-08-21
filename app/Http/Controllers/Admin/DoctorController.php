@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Doctor;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -42,10 +43,7 @@ class DoctorController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/doctors'), $imageName);
-            $validated['image'] = 'uploads/doctors/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'doctors');
         }
 
         Doctor::create($validated);
@@ -88,14 +86,11 @@ class DoctorController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete old image
-            if ($doctor->image && file_exists(public_path($doctor->image))) {
-                unlink(public_path($doctor->image));
+            if ($doctor->image) {
+                ImageUploadService::delete($doctor->image);
             }
 
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/doctors'), $imageName);
-            $validated['image'] = 'uploads/doctors/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'doctors');
         }
 
         $doctor->update($validated);
@@ -107,8 +102,8 @@ class DoctorController extends Controller
     public function destroy(Doctor $doctor)
     {
         // Delete image
-        if ($doctor->image && file_exists(public_path($doctor->image))) {
-            unlink(public_path($doctor->image));
+        if ($doctor->image) {
+            ImageUploadService::delete($doctor->image);
         }
 
         $doctor->delete();

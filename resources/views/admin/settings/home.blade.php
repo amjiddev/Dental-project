@@ -144,7 +144,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-bold">Description</label>
-                            <textarea name="home_about_description" class="form-control" rows="4" required>{{ old('home_about_description', $settings['home_about_description'] ?? 'Welcome to Qasmi Dental & Aesthetic Centre, Lahore\'s trusted choice for dental and facial aesthetic care. We offer cosmetic and general dentistry, smile makeovers, and advanced facial treatments using modern technology and expert care.') }}</textarea>
+                            <textarea name="home_about_description" class="form-control" rows="4" required>{{ old('home_about_description', $settings['home_about_description'] ?? 'Welcome to BrightSmile Dental Clinic, Lahore\'s trusted choice for dental and facial aesthetic care. We offer cosmetic and general dentistry, smile makeovers, and advanced facial treatments using modern technology and expert care.') }}</textarea>
                         </div>
                     </div>
                 </div>

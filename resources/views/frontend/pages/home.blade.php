@@ -1,6 +1,6 @@
 @extends('frontend.layouts.frontend')
 
-@section('meta_title', 'Manji Dental & Aesthetic Centre - Expert Dental and Aesthetic Care')
+@section('meta_title', 'BrightSmile Dental Clinic')
 @section('meta_description', 'We bring together expert dental and aesthetic care with a passion for creating healthy, beautiful smiles & skins. Every treatment is tailored to your needs.')
 
 @section('frontend-content')
@@ -85,7 +85,7 @@
                     {{ $settings['home_about_heading'] ?? 'Creating Beauty Through Healthy Smiles' }}
                 </h2>
                 <p class="text-muted mb-4" style="font-size: 1.1rem; line-height: 1.8;">
-                    {{ $settings['home_about_description'] ?? "Welcome to Qasmi Dental & Aesthetic Centre, Lahore's trusted choice for dental and facial aesthetic care. We offer cosmetic and general dentistry, smile makeovers, and advanced facial treatments using modern technology and expert care." }}
+                    {{ $settings['home_about_description'] ?? "Welcome to BrightSmile Dental Clinic, Lahore's trusted choice for dental and facial aesthetic care. We offer cosmetic and general dentistry, smile makeovers, and advanced facial treatments using modern technology and expert care." }}
                 </p>
                 <a href="{{ route('about') }}" class="btn btn-primary btn-lg px-5 rounded-pill">
                     Learn More About Us

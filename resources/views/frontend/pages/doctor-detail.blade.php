@@ -1,6 +1,6 @@
 @extends('frontend.layouts.frontend')
 
-@section('meta_title', 'Dr. ' . $doctor->name . ' - Manji Dental')
+@section('meta_title', 'Dr. ' . $doctor->name . ' - BrightSmile Dental Clinic')
 @section('meta_description', $doctor->specialization . ' - ' . substr($doctor->bio, 0, 150))
 
 @section('frontend-content')

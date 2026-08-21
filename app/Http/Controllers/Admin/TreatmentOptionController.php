@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\TreatmentOption;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 
 class TreatmentOptionController extends Controller
@@ -33,16 +34,7 @@ class TreatmentOptionController extends Controller
         $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $uploadPath = public_path('uploads/treatment-options');
-
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0755, true);
-            }
-
-            $image->move($uploadPath, $imageName);
-            $validated['image'] = 'uploads/treatment-options/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'treatment-options');
         }
 
         $service->treatmentOptions()->create($validated);
@@ -68,20 +60,11 @@ class TreatmentOptionController extends Controller
         $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if ($request->hasFile('image')) {
-            if ($treatmentOption->image && file_exists(public_path($treatmentOption->image))) {
-                unlink(public_path($treatmentOption->image));
+            if ($treatmentOption->image) {
+                ImageUploadService::delete($treatmentOption->image);
             }
 
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $uploadPath = public_path('uploads/treatment-options');
-
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0755, true);
-            }
-
-            $image->move($uploadPath, $imageName);
-            $validated['image'] = 'uploads/treatment-options/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'treatment-options');
         }
 
         $treatmentOption->update($validated);
@@ -92,8 +75,8 @@ class TreatmentOptionController extends Controller
 
     public function destroy(Service $service, TreatmentOption $treatmentOption)
     {
-        if ($treatmentOption->image && file_exists(public_path($treatmentOption->image))) {
-            unlink(public_path($treatmentOption->image));
+        if ($treatmentOption->image) {
+            ImageUploadService::delete($treatmentOption->image);
         }
 
         $treatmentOption->delete();

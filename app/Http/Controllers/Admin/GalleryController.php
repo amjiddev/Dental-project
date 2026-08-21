@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Gallery;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -33,10 +34,7 @@ class GalleryController extends Controller
         $validated['is_active'] = $request->has('is_active');
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . Str::slug($validated['title']) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/gallery'), $imageName);
-            $validated['image'] = 'uploads/gallery/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'gallery');
         }
 
         Gallery::create($validated);
@@ -64,14 +62,11 @@ class GalleryController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete old image
-            if ($gallery->image && file_exists(public_path($gallery->image))) {
-                unlink(public_path($gallery->image));
+            if ($gallery->image) {
+                ImageUploadService::delete($gallery->image);
             }
 
-            $image = $request->file('image');
-            $imageName = time() . '_' . Str::slug($validated['title']) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/gallery'), $imageName);
-            $validated['image'] = 'uploads/gallery/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'gallery');
         }
 
         $gallery->update($validated);
@@ -83,8 +78,8 @@ class GalleryController extends Controller
     public function destroy(Gallery $gallery)
     {
         // Delete image file
-        if ($gallery->image && file_exists(public_path($gallery->image))) {
-            unlink(public_path($gallery->image));
+        if ($gallery->image) {
+            ImageUploadService::delete($gallery->image);
         }
 
         $gallery->delete();

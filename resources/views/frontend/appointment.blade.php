@@ -1,6 +1,6 @@
 @extends('frontend.layouts.frontend')
 
-@section('meta_title', 'Book Appointment - Manji Dental')
+@section('meta_title', 'Book Appointment - BrightSmile Dental Clinic')
 @section('meta_description', 'Book your dental appointment online. Choose your preferred service, doctor, date and time.')
 
 @section('frontend-content')
