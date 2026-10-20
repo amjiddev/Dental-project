@@ -34,25 +34,25 @@
                     <div class="row g-4">
                         <div class="col-md-3">
                             <label class="form-check form-switch form-check-custom form-check-solid">
-                                <input class="form-check-input visibility-toggle" type="checkbox" data-setting="home_show_services" {{ ($settings['home_show_services'] ?? '1') == '1' ? 'checked' : '' }}>
+                                <input class="form-check-input visibility-toggle" type="checkbox" name="home_show_services" value="1" data-setting="home_show_services" {{ ($settings['home_show_services'] ?? '1') == '1' ? 'checked' : '' }}>
                                 <span class="form-check-label fw-bold">Dental Services</span>
                             </label>
                         </div>
                         <div class="col-md-3">
                             <label class="form-check form-switch form-check-custom form-check-solid">
-                                <input class="form-check-input visibility-toggle" type="checkbox" data-setting="home_show_excellence" {{ ($settings['home_show_excellence'] ?? '1') == '1' ? 'checked' : '' }}>
+                                <input class="form-check-input visibility-toggle" type="checkbox" name="home_show_excellence" value="1" data-setting="home_show_excellence" {{ ($settings['home_show_excellence'] ?? '1') == '1' ? 'checked' : '' }}>
                                 <span class="form-check-label fw-bold">Excellence in Dental</span>
                             </label>
                         </div>
                         <div class="col-md-3">
                             <label class="form-check form-switch form-check-custom form-check-solid">
-                                <input class="form-check-input visibility-toggle" type="checkbox" data-setting="home_show_lead_surgeon" {{ ($settings['home_show_lead_surgeon'] ?? '1') == '1' ? 'checked' : '' }}>
+                                <input class="form-check-input visibility-toggle" type="checkbox" name="home_show_lead_surgeon" value="1" data-setting="home_show_lead_surgeon" {{ ($settings['home_show_lead_surgeon'] ?? '1') == '1' ? 'checked' : '' }}>
                                 <span class="form-check-label fw-bold">Lead Surgeon</span>
                             </label>
                         </div>
                         <div class="col-md-3">
                             <label class="form-check form-switch form-check-custom form-check-solid">
-                                <input class="form-check-input visibility-toggle" type="checkbox" data-setting="home_show_expert_tips" {{ ($settings['home_show_expert_tips'] ?? '1') == '1' ? 'checked' : '' }}>
+                                <input class="form-check-input visibility-toggle" type="checkbox" name="home_show_expert_tips" value="1" data-setting="home_show_expert_tips" {{ ($settings['home_show_expert_tips'] ?? '1') == '1' ? 'checked' : '' }}>
                                 <span class="form-check-label fw-bold">Expert Tips</span>
                             </label>
                         </div>
