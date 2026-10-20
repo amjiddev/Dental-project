@@ -208,3 +208,15 @@ Breadcrumbs::for('admin.contact-messages.show', function (BreadcrumbTrail $trail
     $trail->parent('admin.contact-messages.index');
     $trail->push('Message from ' . $contactMessage->name, route('admin.contact-messages.show', $contactMessage));
 });
+
+// Home > Dashboard > Profile
+Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('My Profile', route('profile.show'));
+});
+
+// Home > Dashboard > Profile > Edit
+Breadcrumbs::for('profile.edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('profile');
+    $trail->push('Edit Profile', route('profile.edit'));
+});
