@@ -48,6 +48,11 @@ class User extends Authenticatable
         'last_login_at' => 'datetime',
     ];
 
+    public function isAdmin(): bool
+    {
+        return $this->hasAnyRole(['administrator', 'admin', 'super_admin']);
+    }
+
     public function getProfilePhotoUrlAttribute()
     {
         if ($this->profile_photo_path) {

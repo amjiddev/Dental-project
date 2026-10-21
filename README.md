@@ -125,14 +125,14 @@ Visit: `http://localhost:8000`
 ## Default Login Credentials
 
 ### Admin Account
-- **Email:** admin@example.com
+- **Email:** admin@dental.com
 - **Password:** password
 
-### User Account
-- **Email:** user@example.com
+### Super Admin Account
+- **Email:** superadmin@dental.com
 - **Password:** password
 
-**⚠️ Important:** Change these credentials after first login!
+These accounts are created by `php artisan db:seed`. Change the default passwords after setup.
 
 ## Project Structure
 

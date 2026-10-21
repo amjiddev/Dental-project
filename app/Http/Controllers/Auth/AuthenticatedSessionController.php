@@ -50,8 +50,7 @@ class AuthenticatedSessionController extends Controller
         ]);
 
         // Role based redirect
-        if ($user->hasRole('administrator')) {
-            // Admins go to dashboard
+        if ($user->isAdmin()) {
             return redirect()->intended(route('dashboard'));
         }
 

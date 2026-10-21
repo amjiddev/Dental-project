@@ -5,6 +5,7 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
@@ -29,6 +30,29 @@ class AuthenticationTest extends TestCase
 
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    public function test_admin_users_are_redirected_to_the_dashboard_and_can_access_admin_routes()
+    {
+        Role::create(['name' => 'admin', 'guard_name' => 'web']);
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $response->assertRedirect(route('dashboard'));
+        $this->get('/admin/appointments')->assertOk();
+    }
+
+    public function test_non_admin_users_cannot_access_admin_routes()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->get('/admin/appointments')->assertRedirect(route('dashboard'));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password()

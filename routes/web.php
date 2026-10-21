@@ -51,7 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile/photo', [\App\Http\Controllers\ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
 
     // Admin Routes
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware('admin_or_redirect')->group(function () {
         Route::resource('appointments', \App\Http\Controllers\Admin\AppointmentController::class);
         Route::get('appointments/{appointment}/handle', [\App\Http\Controllers\Admin\AppointmentController::class, 'handle'])->name('appointments.handle');
         Route::put('appointments/{appointment}/handle', [\App\Http\Controllers\Admin\AppointmentController::class, 'updateHandle'])->name('appointments.handle-update');

@@ -6,7 +6,7 @@
         data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
         data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
         <!--begin::Menu-->
-        @if (auth()->user()->hasRole('administrator'))
+        @if (auth()->user()->isAdmin())
             @include('layout.partials.sidebar-layout.sidebar.admin-sidebar')
         @endif
         <!--end::Menu-->
