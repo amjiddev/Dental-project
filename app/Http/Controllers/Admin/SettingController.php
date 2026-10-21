@@ -100,7 +100,7 @@ class SettingController extends Controller
             Setting::set($key, $value);
         }
 
-        // Toggle switches
+        // Toggle switches - checkboxes are only submitted when checked
         $toggles = [
             'home_show_services',
             'home_show_excellence',
@@ -108,7 +108,8 @@ class SettingController extends Controller
             'home_show_expert_tips',
         ];
         foreach ($toggles as $toggle) {
-            $value = $request->input($toggle, '0');
+            // If checkbox is checked, it will be '1', otherwise it won't be in request
+            $value = $request->has($toggle) ? '1' : '0';
             DB::table('settings')->updateOrInsert(
                 ['key' => $toggle],
                 ['value' => $value, 'updated_at' => now(), 'created_at' => now()]
