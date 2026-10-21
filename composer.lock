@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "edc2ec66ead8602ad363cff6070e6b7a",
+    "content-hash": "7d51665e79567211e58a006f1bde13ea",
     "packages": [
         {
             "name": "bardolf69/laravel11-countries-states-cities",
@@ -10684,5 +10684,8 @@
         "php": "^8.2|^8.3|^8.4"
     },
     "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.4.1"
+    },
     "plugin-api-version": "2.9.0"
 }
