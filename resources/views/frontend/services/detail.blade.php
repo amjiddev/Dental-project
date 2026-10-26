@@ -34,10 +34,17 @@
                     </a>
                 </div>
             </div>
-            <div class="col-lg-5 d-none d-lg-block text-center" data-aos="fade-left">
-                <div class="service-icon-large">
-                    <i class="{{ $service['icon'] }} text-white" style="font-size: 12rem; opacity: 0.3;"></i>
-                </div>
+            <div class="col-lg-5 text-center mt-5 mt-lg-0" data-aos="fade-left">
+                @if(!empty($service['image']))
+                    <img src="{{ asset($service['image']) }}"
+                         alt="{{ $service['title'] }}"
+                         class="img-fluid"
+                         style="max-height: 360px; max-width: 100%; object-fit: contain; border-radius: 20px; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);">
+                @else
+                    <div class="service-icon-large">
+                        <i class="{{ $service['icon'] }} text-white" style="font-size: 12rem; opacity: 0.3;"></i>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -49,36 +56,27 @@
         <div class="row justify-content-center">
             <div class="col-lg-10" data-aos="fade-up">
                 <div class="card border-0 shadow-lg p-5 mb-5" style="border-radius: 15px;">
-                    <div class="row align-items-center">
-                        <div class="col-md-3 text-center mb-4 mb-md-0">
-                            <div class="service-icon-box" style="width: 120px; height: 120px; margin: 0 auto; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
-                                <i class="{{ $service['icon'] }} text-white" style="font-size: 4rem;"></i>
+                    <h2 class="h3 fw-bold mb-3" style="color: var(--primary-blue-dark);">About This Service</h2>
+                    <p class="text-muted mb-4 service-description-3lines" style="font-size: 1.1rem; line-height: 1.8;">
+                        {{ $service['description'] }}
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2" style="font-size: 1.5rem;"></i>
+                                <span class="fw-semibold">Expert Care</span>
                             </div>
                         </div>
-                        <div class="col-md-9">
-                            <h2 class="h3 fw-bold mb-3" style="color: var(--primary-blue-dark);">About This Service</h2>
-                            <p class="text-muted mb-4 service-description-3lines" style="font-size: 1.1rem; line-height: 1.8;">
-                                {{ $service['description'] }}
-                            </p>
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-check-circle text-success me-2" style="font-size: 1.5rem;"></i>
-                                        <span class="fw-semibold">Expert Care</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-check-circle text-success me-2" style="font-size: 1.5rem;"></i>
-                                        <span class="fw-semibold">Modern Equipment</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-check-circle text-success me-2" style="font-size: 1.5rem;"></i>
-                                        <span class="fw-semibold">Affordable Pricing</span>
-                                    </div>
-                                </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2" style="font-size: 1.5rem;"></i>
+                                <span class="fw-semibold">Modern Equipment</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2" style="font-size: 1.5rem;"></i>
+                                <span class="fw-semibold">Affordable Pricing</span>
                             </div>
                         </div>
                     </div>

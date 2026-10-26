@@ -23,6 +23,16 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
+            @if($errors->any())
+                <div class="alert alert-danger mb-4" role="alert">
+                    <strong>Please correct the following errors:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <form action="{{ route('admin.settings.contact.update') }}" method="POST">
                 @csrf
@@ -51,16 +61,31 @@
                         <h4 class="fw-bold text-primary mb-3">Contact Information</h4>
                     </div>
 
+                    <!-- Address -->
+                    <div class="col-12">
+                        <label class="form-label fw-bold" for="contact_address">Address</label>
+                        <textarea id="contact_address" name="contact_address" class="form-control @error('contact_address') is-invalid @enderror" rows="3" maxlength="500" required>{{ old('contact_address', $settings['contact_address'] ?? '') }}</textarea>
+                        @error('contact_address')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <!-- Phone -->
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Phone Number</label>
-                        <input type="text" name="contact_phone" class="form-control" value="{{ old('contact_phone', $settings['contact_phone'] ?? '+1 (555) 123-4567') }}" required>
+                        <input type="text" name="contact_phone" class="form-control @error('contact_phone') is-invalid @enderror" value="{{ old('contact_phone', $settings['contact_phone'] ?? '+1 (555) 123-4567') }}" required>
+                        @error('contact_phone')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <!-- Email -->
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Email Address</label>
-                        <input type="email" name="contact_email" class="form-control" value="{{ old('contact_email', $settings['contact_email'] ?? 'info@dentalclinic.com') }}" required>
+                        <input type="email" name="contact_email" class="form-control @error('contact_email') is-invalid @enderror" value="{{ old('contact_email', $settings['contact_email'] ?? 'info@dentalclinic.com') }}" required>
+                        @error('contact_email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="col-12">

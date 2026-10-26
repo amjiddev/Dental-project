@@ -5,6 +5,10 @@
 
 @section('frontend-content')
 
+@php
+    $contactAddress = preg_replace('/<br\s*\/?>/i', "\n", (string) ($settings['contact_address'] ?? '123 Main Street, City, State 12345'));
+@endphp
+
 <!-- Page Header -->
 <section class="bg-gradient-blue text-white py-5">
     <div class="container">
@@ -36,7 +40,7 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h5 class="h6 mb-1">Address</h5>
-                                <p class="text-muted mb-0">{{ nl2br(e($settings['contact_address'] ?? '123 Main Street<br>City, State 12345')) }}</p>
+                                <p class="text-muted mb-0">{!! nl2br(e($contactAddress)) !!}</p>
                             </div>
                         </div>
 
@@ -88,10 +92,14 @@
                         </div>
 
                         <!-- WhatsApp Button -->
-                        @if(!empty($settings['contact_whatsapp']))
+                        @php
+                            $whatsappNumber = preg_replace('/\D+/', '', (string) ($settings['contact_whatsapp'] ?? ''));
+                        @endphp
+                        @if($whatsappNumber !== '')
                         <div class="mt-4">
-                            <a href="https://wa.me/{{ $settings['contact_whatsapp'] }}?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment" 
-                               target="_blank" 
+                            <a href="https://wa.me/{{ $whatsappNumber }}?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment"
+                               target="_blank"
+                               rel="noopener noreferrer"
                                class="btn btn-success w-100">
                                 <i class="fab fa-whatsapp me-2"></i>
                                 Chat on WhatsApp
@@ -285,8 +293,7 @@
 
         <div class="card border-0 shadow-sm overflow-hidden">
             <div class="card-body p-0">
-                <!-- Static Google Maps Embed -->
-                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13559.441067865504!2d70.8997935111553!3d31.82879811855638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1782972919919!5m2!1sen!2s" 
+                <iframe src="https://maps.google.com/maps?q={{ urlencode($contactAddress) }}&output=embed"
                         width="100%" 
                         height="450" 
                         style="border:0; display: block;" 

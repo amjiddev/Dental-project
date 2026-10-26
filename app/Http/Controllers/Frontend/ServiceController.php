@@ -49,6 +49,7 @@ class ServiceController extends Controller
             'short_description' => $service->short_description,
             'description' => $service->description,
             'icon' => $service->icon,
+            'image' => $service->image,
             'features' => $staticFeatures,
             'treatments' => $service->treatmentOptions()->get()->map(function($treatment) {
                 return [

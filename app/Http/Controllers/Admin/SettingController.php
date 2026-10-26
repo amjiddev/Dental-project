@@ -213,9 +213,11 @@ class SettingController extends Controller
             'contact_linkedin' => 'nullable|url|max:255',
         ]);
 
-        foreach ($validated as $key => $value) {
-            Setting::set($key, $value);
-        }
+        DB::transaction(function () use ($validated) {
+            foreach ($validated as $key => $value) {
+                Setting::set($key, $value);
+            }
+        });
 
         // Clear all related caches
         Cache::forget('contact_settings');

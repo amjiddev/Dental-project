@@ -64,7 +64,9 @@
                 <ul class="list-unstyled text-white-75">
                     <li class="mb-3">
                         <i class="fas fa-map me-2 text-white"></i>
-                        <a href="https://www.google.com/maps/place/31.82879811855638,70.8997935111553" target="_blank" class="text-white-75 text-decoration-none hover-link">View on Map</a>
+                        <a href="https://www.google.com/maps/search/?api=1&amp;query={{ urlencode(preg_replace('/<br\s*\/?>/i', ', ', (string) ($contactSettings['contact_address'] ?? ''))) }}" target="_blank" rel="noopener noreferrer" class="text-white-75 text-decoration-none hover-link">
+                            {{ !empty($contactSettings['contact_address']) ? preg_replace('/<br\s*\/?>/i', ', ', $contactSettings['contact_address']) : 'View on Map' }}
+                        </a>
                     </li>
                     @if(!empty($contactSettings['contact_phone']))
                     <li class="mb-3">
@@ -86,6 +88,9 @@
                         @endif
                         @if(!empty($contactSettings['contact_hours_saturday']))
                         <span class="ms-4">Sat: {{ $contactSettings['contact_hours_saturday'] }}</span>
+                        @endif
+                        @if(!empty($contactSettings['contact_hours_sunday']))
+                        <br><span class="ms-4">Sun: {{ $contactSettings['contact_hours_sunday'] }}</span>
                         @endif
                     </li>
                     @endif
@@ -110,11 +115,20 @@
 </footer>
 
 <!-- WhatsApp Floating Button -->
-@if(!empty($contactSettings['contact_whatsapp']))
-<a href="https://wa.me/{{ $contactSettings['contact_whatsapp'] }}" target="_blank" class="whatsapp-float" title="Chat on WhatsApp">
-    <i class="fab fa-whatsapp"></i>
+@php
+    $whatsappNumber = preg_replace('/\D+/', '', (string) \App\Models\Setting::get(
+        'contact_whatsapp',
+        $contactSettings['contact_whatsapp'] ?? ''
+    ));
+@endphp
+<a href="https://wa.me/{{ $whatsappNumber }}"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="whatsapp-float"
+   title="Chat on WhatsApp"
+   aria-label="Chat with us on WhatsApp">
+    <i class="fab fa-whatsapp" aria-hidden="true"></i>
 </a>
-@endif
 
 <style>
 /* Footer Styles */
