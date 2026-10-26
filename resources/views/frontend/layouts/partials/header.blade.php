@@ -24,12 +24,22 @@
                 
                 <!-- 2. About Dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('about*') || request()->routeIs('team') ? 'active' : '' }}" 
+                    <a class="nav-link d-none d-lg-block {{ request()->routeIs('about*') || request()->routeIs('team') ? 'active' : '' }}"
                        href="{{ route('about') }}" 
                        id="aboutDropdown" 
                        role="button">
-                        About <i class="fas fa-chevron-down ms-1" style="font-size: 0.7rem;"></i>
+                        About
                     </a>
+                    <div class="mobile-dropdown-row d-flex d-lg-none">
+                        <a class="nav-link {{ request()->routeIs('about*') || request()->routeIs('team') ? 'active' : '' }}"
+                           href="{{ route('about') }}">About</a>
+                        <button class="nav-link mobile-dropdown-toggle"
+                                type="button"
+                                aria-expanded="false"
+                                aria-label="Open About menu">
+                            <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+                        </button>
+                    </div>
                     <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
                         <li><a class="dropdown-item" href="{{ route('about') }}">About Us</a></li>
                         <li><a class="dropdown-item" href="{{ route('team') }}">Our Team</a></li>
@@ -38,12 +48,22 @@
                 
                 <!-- 3. Services Dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('services.*') ? 'active' : '' }}" 
+                    <a class="nav-link d-none d-lg-block {{ request()->routeIs('services.*') ? 'active' : '' }}"
                        href="{{ route('services.index') }}" 
                        id="servicesDropdown" 
                        role="button">
-                        Services <i class="fas fa-chevron-down ms-1" style="font-size: 0.7rem;"></i>
+                        Services
                     </a>
+                    <div class="mobile-dropdown-row d-flex d-lg-none">
+                        <a class="nav-link {{ request()->routeIs('services.*') ? 'active' : '' }}"
+                           href="{{ route('services.index') }}">Services</a>
+                        <button class="nav-link mobile-dropdown-toggle"
+                                type="button"
+                                aria-expanded="false"
+                                aria-label="Open Services menu">
+                            <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+                        </button>
+                    </div>
                     <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
                         @forelse($frontendServices ?? [] as $service)
                         <li><a class="dropdown-item" href="{{ route('services.show', $service->slug) }}">{{ $service->name }}</a></li>
@@ -137,6 +157,26 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    document.querySelectorAll('.mobile-dropdown-toggle').forEach(function(toggle) {
+        toggle.addEventListener('click', function() {
+            const dropdown = this.closest('.nav-item.dropdown');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            const isOpen = dropdown.classList.contains('show');
+
+            document.querySelectorAll('.navbar .nav-item.dropdown.show').forEach(function(openDropdown) {
+                openDropdown.classList.remove('show');
+                openDropdown.querySelector('.dropdown-menu').classList.remove('show');
+                openDropdown.querySelector('.mobile-dropdown-toggle').setAttribute('aria-expanded', 'false');
+            });
+
+            if (!isOpen) {
+                dropdown.classList.add('show');
+                menu.classList.add('show');
+                this.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
 });
 </script>
 
@@ -203,7 +243,6 @@ document.addEventListener('DOMContentLoaded', function() {
     transition: transform 0.3s ease;
 }
 
-.nav-item.dropdown:hover .nav-link i.fa-chevron-down,
 .nav-item.dropdown.show .nav-link i.fa-chevron-down {
     transform: rotate(180deg);
 }
@@ -292,6 +331,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     .nav-item {
         padding: 0.25rem 0;
+    }
+
+    .mobile-dropdown-row {
+        align-items: center;
+    }
+
+    .mobile-dropdown-row > a {
+        flex: 0 0 auto;
+        padding-right: 0.25rem !important;
+    }
+
+    .mobile-dropdown-toggle {
+        border: 0;
+        background: transparent;
+        padding-left: 0.25rem !important;
     }
     
     .dropdown-menu {
