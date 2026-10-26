@@ -19,15 +19,32 @@ class RolesPermissionsSeeder extends Seeder
         ];
 
         $permissions_by_role = [
+            'super_admin' => [
+                'user management',
+                'appointment management',
+                'doctor management',
+                'service management',
+                'gallery management',
+                'blog management',
+                'testimonial management',
+                'setting management',
+                'discount management',
+                'expert tip management',
+                'treatment option management',
+                'contact message management',
+            ],
+            'admin' => [
+                'appointment management',
+                'doctor management',
+                'service management',
+                'gallery management',
+                'blog management',
+                'testimonial management',
+                'contact message management',
+            ],
             'administrator' => [
                 'user management',
             ],
-            'super_admin' => [
-                'user management',
-            ],
-            'department_admin' => [],
-            'teacher' => [],
-            'student' => [],
         ];
 
         // Create permissions
@@ -42,7 +59,7 @@ class RolesPermissionsSeeder extends Seeder
             }
         }
 
-        // Create administrator role and sync permissions
+        // Create roles and sync permissions
         foreach ($permissions_by_role as $role => $permissions) {
             $full_permissions_list = [];
             foreach ($abilities as $ability) {
@@ -57,7 +74,21 @@ class RolesPermissionsSeeder extends Seeder
             }
         }
 
-        // Assign administrator role to demo@demo.com
-        User::where('email', 'demo@demo.com')->first()?->assignRole('administrator');
+        // Assign roles to users
+        $superAdmin = User::where('email', 'superadmin@dental.com')->first();
+        if ($superAdmin) {
+            $superAdmin->assignRole('super_admin');
+        }
+
+        $admin = User::where('email', 'admin@dental.com')->first();
+        if ($admin) {
+            $admin->assignRole('admin');
+        }
+
+        // Keep demo user with administrator role for backward compatibility
+        $demoUser = User::where('email', 'demo@demo.com')->first();
+        if ($demoUser) {
+            $demoUser->assignRole('administrator');
+        }
     }
 }

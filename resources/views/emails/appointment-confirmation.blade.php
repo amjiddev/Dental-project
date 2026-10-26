@@ -13,7 +13,7 @@
         <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px;">
             <p style="font-size: 16px;">Dear {{ $appointment->name }},</p>
             
-            <p>Thank you for booking an appointment with Qasmi Dental & Aesthetic Centre. Your appointment has been successfully confirmed.</p>
+            <p>Thank you for booking an appointment with BrightSmile Dental Clinic. Your appointment has been successfully confirmed.</p>
             
             <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <h2 style="color: #1e40af; margin-top: 0;">Appointment Details</h2>
@@ -61,7 +61,7 @@
             
             <p style="text-align: center; color: #6b7280; font-size: 14px; margin-top: 30px;">
                 We look forward to seeing you!<br>
-                <strong>Qasmi Dental & Aesthetic Centre Team</strong>
+                <strong>BrightSmile Dental Clinic Team</strong>
             </p>
         </div>
     </div>

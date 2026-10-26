@@ -22,13 +22,6 @@
         </div>
 
         <div class="card-body pt-0">
-            @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            @endif
-
             <div class="table-responsive">
                 <table class="table table-row-bordered table-row-gray-300 align-middle gs-0 gy-4">
                     <thead>
@@ -88,32 +81,55 @@
                                 @endif
                             </td>
                             <td>
-                                @if($doctor->is_active)
-                                <span class="badge badge-light-success">Active</span>
-                                @else
-                                <span class="badge badge-light-danger">Inactive</span>
+                                <button type="button" class="btn btn-sm status-badge" data-doctor-id="{{ $doctor->id }}" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                    @if($doctor->is_active)
+                                    <span class="badge badge-light-success">Active</span>
+                                    @else
+                                    <span class="badge badge-light-danger">Inactive</span>
+                                    @endif
+                                </button>
+                                @if($doctor->is_lead_doctor)
+                                <span class="badge badge-light-warning ms-1">Lead</span>
                                 @endif
                             </td>
                             <td class="text-end pe-4">
-                                <a href="{{ route('admin.doctors.edit', $doctor->id) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="Edit">
-                                    <i class="ki-duotone ki-pencil fs-2">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
+                                <a href="{{ route('admin.doctors.edit', $doctor->id) }}" 
+                                   class="btn btn-sm btn-primary me-2" title="Edit">
+                                    <i class="ki-duotone ki-pencil fs-2"></i>
+                                    Edit
                                 </a>
-                                <form action="{{ route('admin.doctors.destroy', $doctor->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this doctor?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm" title="Delete">
-                                        <i class="ki-duotone ki-trash fs-2">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                            <span class="path3"></span>
-                                            <span class="path4"></span>
-                                            <span class="path5"></span>
-                                        </i>
-                                    </button>
-                                </form>
+                                <button type="button" 
+                                        class="btn btn-sm btn-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal{{ $doctor->id }}"
+                                        title="Delete">
+                                    <i class="ki-duotone ki-trash fs-2"></i>
+                                    Delete
+                                </button>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteModal{{ $doctor->id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete Doctor</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete this doctor?</p>
+                                                <p class="text-danger fw-bold">This action cannot be undone.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{ route('admin.doctors.destroy', $doctor->id) }}" method="POST" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -139,3 +155,40 @@
     </div>
 
 </x-default-layout>
+
+<script>
+document.querySelectorAll('.status-badge').forEach(button => {
+    button.addEventListener('click', function() {
+        const doctorId = this.getAttribute('data-doctor-id');
+        const badge = this.querySelector('.badge');
+        const originalText = badge.textContent;
+        badge.textContent = 'Loading...';
+        
+        fetch(`/admin/doctors/${doctorId}/toggle-status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.is_active) {
+                    badge.classList.remove('badge-light-danger');
+                    badge.classList.add('badge-light-success');
+                    badge.textContent = 'Active';
+                } else {
+                    badge.classList.remove('badge-light-success');
+                    badge.classList.add('badge-light-danger');
+                    badge.textContent = 'Inactive';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            badge.textContent = originalText;
+        });
+    });
+});
+</script>

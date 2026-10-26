@@ -1,0 +1,200 @@
+/* Loading Spinner Styles */
+.kt-loading-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.kt-loading-spinner.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.spinner-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.favicon-spinner {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 30px;
+    animation: toothSpin 3s linear infinite;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
+    will-change: transform;
+}
+
+.favicon-spinner img,
+.favicon-spinner svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.spinner-text {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    animation: textPulse 2s ease-in-out infinite;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+}
+
+.spinner-subtext {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-top: 12px;
+    letter-spacing: 1px;
+    animation: fadeInOut 2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toothSpin {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+    50% {
+        transform: rotate(180deg) scale(1.08);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+@keyframes textPulse {
+    0%, 100% {
+        opacity: 1;
+        letter-spacing: 3px;
+    }
+    50% {
+        opacity: 0.7;
+        letter-spacing: 5px;
+    }
+}
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes fadeOutSlide {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+}
+
+/* Hide spinner when page is loaded */
+.kt-loading-spinner.loaded {
+    animation: fadeOutSlide 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.kt-loading-spinner.loaded .spinner-content {
+    animation: none;
+}
+
+/* Mobile responsive */
+@media (max-width: 1024px) {
+    .favicon-spinner {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 25px;
+    }
+
+    .spinner-text {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .favicon-spinner {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 20px;
+    }
+
+    .spinner-text {
+        font-size: 16px;
+        letter-spacing: 2px;
+    }
+
+    .spinner-subtext {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .favicon-spinner {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 15px;
+    }
+
+    .spinner-text {
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+    .spinner-subtext {
+        font-size: 11px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .kt-loading-spinner {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    }
+}
+
+/* Performance optimization */
+@media (prefers-reduced-motion: reduce) {
+    .favicon-spinner,
+    .spinner-text,
+    .spinner-content,
+    .kt-loading-spinner.loaded {
+        animation: none !important;
+    }
+
+    .kt-loading-spinner {
+        transition: none !important;
+    }
+}

@@ -20,7 +20,7 @@ class AppointmentConfirmation extends Mailable
 
     public function build()
     {
-        return $this->subject('Appointment Confirmed - Manji Dental & Aesthetic Centre')
+        return $this->subject('Appointment Confirmed - BrightSmile Dental Clinic')
                     ->view('emails.appointment-confirmation');
     }
 }

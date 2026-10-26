@@ -4,7 +4,7 @@
 
 <head>
     <base href="" />
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('meta_title', 'Admin Page')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8" />
     <meta name="description" content="" />

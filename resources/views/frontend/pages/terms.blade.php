@@ -1,6 +1,6 @@
 @extends('frontend.layouts.frontend')
 
-@section('meta_title', 'Terms & Conditions - Manji Dental')
+@section('meta_title', 'Terms & Conditions - BrightSmile Dental Clinic')
 @section('meta_description', 'Read our terms and conditions for using our dental services.')
 
 @section('frontend-content')
@@ -24,7 +24,7 @@
                     <div class="card-body">
                         <h2 class="h4 fw-bold mb-4 text-primary">1. Acceptance of Terms</h2>
                         <p class="text-muted mb-4">
-                            By accessing and using the services of Qasmi Dental & Aesthetic Centre, you accept and agree to be bound by the terms and provision of this agreement.
+                            By accessing and using the services of BrightSmile Dental Clinic, you accept and agree to be bound by the terms and provision of this agreement.
                         </p>
 
                         <h2 class="h4 fw-bold mb-4 text-primary">2. Appointment Policy</h2>

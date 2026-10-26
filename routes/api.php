@@ -22,6 +22,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Public API for services and treatments
+Route::get('/services/{id}/treatments', function ($id) {
+    $treatments = \App\Models\TreatmentOption::where('service_id', $id)
+        ->where('is_active', true)
+        ->orderBy('order', 'asc')
+        ->get(['id', 'name', 'description'])
+        ->toArray();
+    
+    return response()->json(['treatments' => $treatments]);
+});
+
 Route::prefix('v1')->group(function () {
 
     Route::get('/users', function (Request $request) {

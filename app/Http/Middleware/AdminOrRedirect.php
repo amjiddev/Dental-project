@@ -20,8 +20,7 @@ class AdminOrRedirect
             return redirect()->route('login');
         }
 
-        // Check if user has admin role
-        if (auth()->user()->hasRole('administrator')) {
+        if (auth()->user()->isAdmin()) {
             return $next($request);
         }
 

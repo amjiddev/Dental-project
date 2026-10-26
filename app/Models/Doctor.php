@@ -19,11 +19,13 @@ class Doctor extends Model
         'phone',
         'experience_years',
         'is_active',
+        'is_lead_doctor',
         'order',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_lead_doctor' => 'boolean',
         'experience_years' => 'integer',
     ];
 

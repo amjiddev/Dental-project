@@ -1,6 +1,6 @@
 @extends('frontend.layouts.frontend')
 
-@section('meta_title', 'Privacy Policy - Manji Dental')
+@section('meta_title', 'Privacy Policy - BrightSmile Dental Clinic')
 @section('meta_description', 'Read our privacy policy to understand how we protect your personal information.')
 
 @section('frontend-content')

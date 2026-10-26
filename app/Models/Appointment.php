@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Appointment extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -20,6 +21,7 @@ class Appointment extends Model
         'message',
         'status',
         'admin_notes',
+        'is_seen',
     ];
 
     protected $casts = [
@@ -51,5 +53,11 @@ class Appointment extends Model
         return $query->where('appointment_date', '>=', now()->toDateString())
                      ->orderBy('appointment_date', 'asc')
                      ->orderBy('appointment_time', 'asc');
+    }
+
+    public function markAsSeen()
+    {
+        $this->update(['is_seen' => true]);
+        return $this;
     }
 }

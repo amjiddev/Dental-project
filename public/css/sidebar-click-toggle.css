@@ -1,0 +1,45 @@
+﻿/**
+ * Sidebar Styling - Default Metronic Dark Sidebar
+ */
+
+/* Ensure sidebar stays on left side */
+#kt_app_sidebar {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Keep sidebar inline with content */
+.app-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+/* Sidebar column */
+.app-wrapper > #kt_app_sidebar {
+    flex-shrink: 0;
+    width: 275px;
+    min-width: 275px;
+    max-width: 275px;
+}
+
+/* Main content takes remaining space */
+#kt_app_main {
+    flex: 1 1 auto;
+    width: 100%;
+}
+
+/* Ensure menu is visible */
+.menu {
+    display: block !important;
+}
+
+.menu-item {
+    display: block !important;
+}
+
+.menu-title {
+    display: inline !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}

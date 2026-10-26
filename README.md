@@ -1,4 +1,4 @@
-# Manji Dental & Aesthetic Centre - Website
+# BrightSmile Dental Clinic - Website
 
 A comprehensive dental clinic management system built with Laravel, featuring appointment booking, service management, doctor profiles, and admin dashboard.
 
@@ -125,14 +125,14 @@ Visit: `http://localhost:8000`
 ## Default Login Credentials
 
 ### Admin Account
-- **Email:** admin@example.com
+- **Email:** admin@dental.com
 - **Password:** password
 
-### User Account
-- **Email:** user@example.com
+### Super Admin Account
+- **Email:** superadmin@dental.com
 - **Password:** password
 
-**⚠️ Important:** Change these credentials after first login!
+These accounts are created by `php artisan db:seed`. Change the default passwords after setup.
 
 ## Project Structure
 
@@ -174,7 +174,7 @@ MAIL_USERNAME=your-email@gmail.com
 MAIL_PASSWORD=your-app-password
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS="your-email@gmail.com"
-MAIL_FROM_NAME="Manji Dental & Aesthetic Centre"
+MAIL_FROM_NAME="BrightSmile Dental Clinic"
 ```
 
 2. Uncomment email code in `app/Http/Controllers/Admin/AppointmentController.php`
@@ -300,7 +300,7 @@ For support, email: info@manjidental.com
 
 ---
 
-**Developed for Manji Dental & Aesthetic Centre** Project
+**Developed for BrightSmile Dental Clinic** Project
 
 ## Installation
 

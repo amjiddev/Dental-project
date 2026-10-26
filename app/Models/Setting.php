@@ -12,7 +12,6 @@ class Setting extends Model
     protected $fillable = [
         'key',
         'value',
-        'type',
     ];
 
     public static function get($key, $default = null)
@@ -21,11 +20,11 @@ class Setting extends Model
         return $setting ? $setting->value : $default;
     }
 
-    public static function set($key, $value, $type = 'text')
+    public static function set($key, $value)
     {
         return self::updateOrCreate(
             ['key' => $key],
-            ['value' => $value, 'type' => $type]
+            ['value' => $value]
         );
     }
 }

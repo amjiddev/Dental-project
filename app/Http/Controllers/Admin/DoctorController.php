@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Doctor;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -30,17 +31,19 @@ class DoctorController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'experience_years' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
             'order' => 'nullable|integer|min:0',
         ]);
 
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
+        $validated['is_lead_doctor'] = $request->has('is_lead_doctor') ? 1 : 0;
+
+        // If setting as lead doctor, unset previous lead doctor
+        if ($validated['is_lead_doctor']) {
+            Doctor::where('is_lead_doctor', true)->update(['is_lead_doctor' => false]);
+        }
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/doctors'), $imageName);
-            $validated['image'] = 'uploads/doctors/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'doctors');
         }
 
         Doctor::create($validated);
@@ -70,22 +73,24 @@ class DoctorController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'experience_years' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
             'order' => 'nullable|integer|min:0',
         ]);
 
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
+        $validated['is_lead_doctor'] = $request->has('is_lead_doctor') ? 1 : 0;
+
+        // If setting as lead doctor, unset previous lead doctor
+        if ($validated['is_lead_doctor']) {
+            Doctor::where('id', '!=', $doctor->id)->update(['is_lead_doctor' => false]);
+        }
 
         if ($request->hasFile('image')) {
             // Delete old image
-            if ($doctor->image && file_exists(public_path($doctor->image))) {
-                unlink(public_path($doctor->image));
+            if ($doctor->image) {
+                ImageUploadService::delete($doctor->image);
             }
 
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads/doctors'), $imageName);
-            $validated['image'] = 'uploads/doctors/' . $imageName;
+            $validated['image'] = ImageUploadService::upload($request->file('image'), 'doctors');
         }
 
         $doctor->update($validated);
@@ -97,13 +102,25 @@ class DoctorController extends Controller
     public function destroy(Doctor $doctor)
     {
         // Delete image
-        if ($doctor->image && file_exists(public_path($doctor->image))) {
-            unlink(public_path($doctor->image));
+        if ($doctor->image) {
+            ImageUploadService::delete($doctor->image);
         }
 
         $doctor->delete();
 
         return redirect()->route('admin.doctors.index')
             ->with('success', 'Doctor deleted successfully.');
+    }
+
+    public function toggleStatus(Doctor $doctor)
+    {
+        $doctor->update([
+            'is_active' => !$doctor->is_active
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $doctor->is_active,
+        ]);
     }
 }
